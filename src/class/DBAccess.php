@@ -1,5 +1,5 @@
 <?php
-require_once __DIR__.'/../../sweng-projekt.cfg.inc.php';
+require_once __DIR__.'/../../../sweng-projekt.cfg.inc.php';
 
 /**
  * This is a class for easy and general access to the database via PDO.
