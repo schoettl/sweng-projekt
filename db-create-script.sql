@@ -92,8 +92,8 @@ CREATE  TABLE IF NOT EXISTS `sweng_projekt`.`access` (
   `Begin` DATE NULL ,
   `End` DATE NULL ,
   PRIMARY KEY (`AccessId`) ,
-  INDEX `fk_booking_lock2_idx` (`LockId` ASC) ,
-  CONSTRAINT `fk_booking_lock2`
+  INDEX `fk_access_lock2_idx` (`LockId` ASC) ,
+  CONSTRAINT `fk_access_lock2`
     FOREIGN KEY (`LockId` )
     REFERENCES `sweng_projekt`.`lock` (`LockId` )
     ON DELETE NO ACTION
@@ -110,9 +110,9 @@ CREATE  TABLE IF NOT EXISTS `sweng_projekt`.`accesslist` (
   `KeyId` INT NOT NULL ,
   `AccessId` INT NOT NULL ,
   PRIMARY KEY (`KeyId`, `AccessId`) ,
-  INDEX `fk_accesslist_booking1_idx` (`AccessId` ASC) ,
+  INDEX `fk_accesslist_access_idx` (`AccessId` ASC) ,
   INDEX `fk_accesslist_key1_idx` (`KeyId` ASC) ,
-  CONSTRAINT `fk_accesslist_booking1`
+  CONSTRAINT `fk_accesslist_access`
     FOREIGN KEY (`AccessId` )
     REFERENCES `sweng_projekt`.`access` (`AccessId` )
     ON DELETE NO ACTION
@@ -312,7 +312,7 @@ USE `sweng_projekt`$$
 
 CREATE TRIGGER access_upd AFTER UPDATE ON access
 FOR EACH ROW BEGIN
-  -- Wie viele Einträge gibt es zur alten bzw. neuen BookingId in der accesslist?
+  -- Wie viele Einträge gibt es zur alten bzw. neuen AccessId in der accesslist?
   SELECT COUNT(*) INTO @ocount FROM accesslist WHERE AccessId = OLD.AccessId;
   SELECT COUNT(*) INTO @ncount FROM accesslist WHERE AccessId = NEW.AccessId;
   IF OLD.LockId != NEW.LockId AND @ocount > 0 THEN
