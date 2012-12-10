@@ -22,13 +22,18 @@ class Lock
             return true;
         
         // accesslist pruefen!
-        foreach ($this->config->accessList as $item)
+        foreach ($this->config->accessList as $item) {
             if ($item->keyId == $key->getKeyId()) {
-                
-                // zeit zur not via DB pruefen ala SELECT ($begin <= NOW() AND (NOW() < $end OR $end IS NULL))
-                
-                break;
+                // TODO zeit zur not via DB pruefen ala 
+                // SELECT ($begin <= NOW() AND (NOW() < $end OR $end IS NULL))
+                if (false/* zeit passt auch */) {
+
+                   return true;
+                }
             }
+        }
+        
+        return false;
     }
     function getConfig()
     {
