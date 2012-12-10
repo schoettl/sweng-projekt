@@ -1,5 +1,5 @@
 <?php
-class newPHPClass
+class LockProgrammerConfig
 {
     public $lockId;
     public $location;
