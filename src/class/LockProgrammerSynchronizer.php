@@ -6,7 +6,7 @@ class LockProgrammerSynchronizer
         $dbh = new DBAccess();
         
         // Von Programmiergeraet in DB
-        foreach ($lockProgrammer->getLockProgrammerConfigs() as $cfg) {
+        foreach ($lockProgrammer->getConfigList() as $cfg) {
             if ($cfg->inSync) {
                 $dbh->pexec("UPDATE lock SET last_sync = NOW() WHERE LockId = ?", $cfg->lockId);
             }
@@ -35,6 +35,6 @@ class LockProgrammerSynchronizer
         }
         
         // Auf Programmiergeraet uebertragen
-        $lockProgrammer->setLockProgrammerConfigs($list);
+        $lockProgrammer->setConfigList($list);
     }
 }

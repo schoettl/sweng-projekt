@@ -1,13 +1,13 @@
 <?php
 class ActiveKey extends Key
 {
-    private $configs; // private, weil keyId auch private ist
-    function getConfigs()
+    private $list; // private, weil keyId auch private ist
+    function getConfigList()
     {
-        return $this->configs;
+        return $this->list;
     }
-    function setConfigs($configs)
+    function setConfigList($list)
     {
-        $this->configs = $configs;
+        $this->list = $list;
     }
 }
