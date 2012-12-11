@@ -1,4 +1,6 @@
 <?php
+require_once 'DBAccess.php';
+
 class LockProgrammerSynchronizer
 {
     function synchronize($lockProgrammer)
@@ -6,9 +8,11 @@ class LockProgrammerSynchronizer
         $dbh = new DBAccess();
         
         // Von Programmiergeraet in DB
+        $stmt = $dbh->prepare("UPDATE `lock` SET last_sync = NOW() WHERE LockId = ?");
         foreach ($lockProgrammer->getConfigList() as $cfg) {
             if ($cfg->inSync) {
-                $dbh->pexec("UPDATE lock SET last_sync = NOW() WHERE LockId = ?", $cfg->lockId);
+                $stmt->bindParam(1, $cfg->lockId, PDO::PARAM_INT);
+                $stmt->execute();
             }
         }
         
@@ -18,7 +22,7 @@ class LockProgrammerSynchronizer
         while ($lock = $locks->fetchObject()) {            
             $wlres = $dbh->pquery("SELECT KeyId FROM whitelist WHERE LockId = ?", $lock->LockId);
             $blres = $dbh->pquery("SELECT KeyId FROM blacklist WHERE LockId = ?", $lock->LockId);
-            $alres = $dbh->pquery("SELECT KeyId, Begin, End FROM accesslist NATURAL LEFT JOIN access WHERE LockId = ?", $lock->LockId);
+            $alres = $dbh->pquery("SELECT KeyId, Begin, End FROM access NATURAL LEFT JOIN `key` WHERE Aktiv = FALSE AND LockId = ?", $lock->LockId);
             // LockConfig anlegen
             $wl = array();
             $bl = array();
