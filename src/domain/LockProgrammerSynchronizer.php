@@ -1,5 +1,5 @@
 <?php
-require_once 'DBAccess.php';
+require_once '../class/DBAccess.php';
 
 class LockProgrammerSynchronizer
 {
