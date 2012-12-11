@@ -1,5 +1,6 @@
 <?php
 require_once 'class/DBAccess.php';
+require_once 'domain/System.php';
 
 start_session();
 
@@ -14,8 +15,7 @@ try {
         WHERE LockId IS NOT NULL"); // last_change wird bei Aenderung zwar autom.
         //aktualisiert, aber eben nur bei AENDERUNG. Deswegen explizit.
 
-    // TODO alle erforderlichen Objekte anlegen in Session.
-
+    $_SESSION['system'] = new System();
     
     $success = true;
 } catch (Exception $e) {
