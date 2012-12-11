@@ -87,63 +87,22 @@ ENGINE = InnoDB;
 DROP TABLE IF EXISTS `sweng_projekt`.`access` ;
 
 CREATE  TABLE IF NOT EXISTS `sweng_projekt`.`access` (
-  `AccessId` INT NOT NULL ,
+  `AccessId` INT NOT NULL COMMENT 'AccessId aus AccessSystem (aka Buchungssystem)!' ,
   `LockId` INT NOT NULL ,
+  `KeyId` INT NOT NULL COMMENT 'Wenn key Aktiv: Zugang wird auf key gespeichert!\\nWenn key nicht Aktiv: Zugang wird in lock gespeichert!' ,
   `Begin` DATE NULL ,
   `End` DATE NULL ,
   PRIMARY KEY (`AccessId`) ,
   INDEX `fk_access_lock2_idx` (`LockId` ASC) ,
+  INDEX `fk_access_key1_idx` (`KeyId` ASC) ,
   CONSTRAINT `fk_access_lock2`
     FOREIGN KEY (`LockId` )
     REFERENCES `sweng_projekt`.`lock` (`LockId` )
     ON DELETE NO ACTION
-    ON UPDATE NO ACTION)
-ENGINE = InnoDB;
-
-
--- -----------------------------------------------------
--- Table `sweng_projekt`.`accesslist`
--- -----------------------------------------------------
-DROP TABLE IF EXISTS `sweng_projekt`.`accesslist` ;
-
-CREATE  TABLE IF NOT EXISTS `sweng_projekt`.`accesslist` (
-  `KeyId` INT NOT NULL ,
-  `AccessId` INT NOT NULL ,
-  PRIMARY KEY (`KeyId`, `AccessId`) ,
-  INDEX `fk_accesslist_access_idx` (`AccessId` ASC) ,
-  INDEX `fk_accesslist_key1_idx` (`KeyId` ASC) ,
-  CONSTRAINT `fk_accesslist_access`
-    FOREIGN KEY (`AccessId` )
-    REFERENCES `sweng_projekt`.`access` (`AccessId` )
-    ON DELETE NO ACTION
     ON UPDATE NO ACTION,
-  CONSTRAINT `fk_accesslist_key1`
+  CONSTRAINT `fk_access_key1`
     FOREIGN KEY (`KeyId` )
     REFERENCES `sweng_projekt`.`key` (`KeyId` )
-    ON DELETE NO ACTION
-    ON UPDATE NO ACTION)
-ENGINE = InnoDB;
-
-
--- -----------------------------------------------------
--- Table `sweng_projekt`.`key_has_access`
--- -----------------------------------------------------
-DROP TABLE IF EXISTS `sweng_projekt`.`key_has_access` ;
-
-CREATE  TABLE IF NOT EXISTS `sweng_projekt`.`key_has_access` (
-  `KeyId` INT NOT NULL ,
-  `AccessId` INT NOT NULL ,
-  PRIMARY KEY (`KeyId`, `AccessId`) ,
-  INDEX `fk_key_has_access_access1_idx` (`AccessId` ASC) ,
-  INDEX `fk_key_has_access_key1_idx` (`KeyId` ASC) ,
-  CONSTRAINT `fk_key_has_access_key1`
-    FOREIGN KEY (`KeyId` )
-    REFERENCES `sweng_projekt`.`key` (`KeyId` )
-    ON DELETE NO ACTION
-    ON UPDATE NO ACTION,
-  CONSTRAINT `fk_key_has_access_access1`
-    FOREIGN KEY (`AccessId` )
-    REFERENCES `sweng_projekt`.`access` (`AccessId` )
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
 ENGINE = InnoDB;
@@ -256,70 +215,54 @@ DELIMITER ;
 DELIMITER $$
 
 USE `sweng_projekt`$$
-DROP TRIGGER IF EXISTS `sweng_projekt`.`accesslist_ins` $$
-USE `sweng_projekt`$$
-
-
-CREATE TRIGGER accesslist_ins AFTER INSERT ON accesslist
-FOR EACH ROW BEGIN
-  SELECT LockId INTO @id FROM access WHERE AccessId = NEW.AccessId;
-  CALL touch_lock(@id);
-END
-
-$$
-
-
-USE `sweng_projekt`$$
-DROP TRIGGER IF EXISTS `sweng_projekt`.`accesslist_upd` $$
-USE `sweng_projekt`$$
-
-
-CREATE TRIGGER accesslist_upd AFTER UPDATE ON accesslist
-FOR EACH ROW BEGIN
-  SELECT LockId INTO @oid FROM access WHERE AccessId = OLD.AccessId;
-  SELECT LockId INTO @nid FROM access WHERE AccessId = NEW.AccessId;
-  IF @oid != @nid THEN
-    CALL touch_lock(@oid);
-  END IF;
-  CALL touch_lock(@nid);
-END
-
-$$
-
-
-USE `sweng_projekt`$$
-DROP TRIGGER IF EXISTS `sweng_projekt`.`accesslist_del` $$
-USE `sweng_projekt`$$
-
-
-CREATE TRIGGER accesslist_del AFTER DELETE ON accesslist
-FOR EACH ROW BEGIN
-  SELECT LockId INTO @id FROM access WHERE AccessId = OLD.AccessId;
-  CALL touch_lock(@id);
-END
-
-$$
-
-
-DELIMITER ;
-
-DELIMITER $$
-
-USE `sweng_projekt`$$
 DROP TRIGGER IF EXISTS `sweng_projekt`.`access_upd` $$
 USE `sweng_projekt`$$
 
 
 CREATE TRIGGER access_upd AFTER UPDATE ON access
 FOR EACH ROW BEGIN
-  -- Wie viele Einträge gibt es zur alten bzw. neuen AccessId in der accesslist?
-  SELECT COUNT(*) INTO @ocount FROM accesslist WHERE AccessId = OLD.AccessId;
-  SELECT COUNT(*) INTO @ncount FROM accesslist WHERE AccessId = NEW.AccessId;
-  IF OLD.LockId != NEW.LockId AND @ocount > 0 THEN
+  -- Handelt es sich um Passiven Schlüssel?  
+  SELECT Aktiv INTO @oaktiv FROM `key` WHERE KeyId = OLD.KeyId;
+  SELECT Aktiv INTO @naktiv FROM `key` WHERE KeyId = NEW.KeyId;
+  IF OLD.LockId != NEW.LockId AND NOT @oaktiv THEN
     CALL touch_lock(OLD.LockId);
   END IF;
-  IF @ncount > 0 THEN
+  IF NOT @naktiv THEN
     CALL touch_lock(NEW.LockId);
+  END IF;
+END
+
+$$
+
+
+USE `sweng_projekt`$$
+DROP TRIGGER IF EXISTS `sweng_projekt`.`access_ins` $$
+USE `sweng_projekt`$$
+
+
+CREATE TRIGGER access_ins AFTER INSERT ON access
+FOR EACH ROW BEGIN
+  -- Handelt es sich um Passiven Schlüssel?
+  SELECT Aktiv INTO @aktiv FROM `key` WHERE KeyId = NEW.KeyId;  
+  IF NOT @aktiv THEN
+    CALL touch_lock(NEW.LockId);
+  END IF;
+END
+
+$$
+
+
+USE `sweng_projekt`$$
+DROP TRIGGER IF EXISTS `sweng_projekt`.`access_del` $$
+USE `sweng_projekt`$$
+
+
+CREATE TRIGGER access_del AFTER DELETE ON access
+FOR EACH ROW BEGIN
+  -- Handelt es sich um Passiven Schlüssel?
+  SELECT Aktiv INTO @aktiv FROM `key` WHERE KeyId = OLD.KeyId;  
+  IF NOT @aktiv THEN
+    CALL touch_lock(OLD.LockId);
   END IF;
 END
 
@@ -334,10 +277,6 @@ GRANT USAGE ON *.* TO sweng_projekt;
 SET SQL_MODE='TRADITIONAL,ALLOW_INVALID_DATES';
 CREATE USER `sweng_projekt` IDENTIFIED BY 'sweng_projekt';
 
-grant INSERT on TABLE `sweng_projekt`.`accesslist` to sweng_projekt;
-grant SELECT on TABLE `sweng_projekt`.`accesslist` to sweng_projekt;
-grant UPDATE on TABLE `sweng_projekt`.`accesslist` to sweng_projekt;
-grant DELETE on TABLE `sweng_projekt`.`accesslist` to sweng_projekt;
 grant INSERT on TABLE `sweng_projekt`.`blacklist` to sweng_projekt;
 grant SELECT on TABLE `sweng_projekt`.`blacklist` to sweng_projekt;
 grant UPDATE on TABLE `sweng_projekt`.`blacklist` to sweng_projekt;
