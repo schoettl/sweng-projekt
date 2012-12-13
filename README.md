@@ -3,8 +3,8 @@ sweng-projekt
 
 Projekt der Lehrveranstaltung
 
-Software Engineering
-Fakultät 04
+Software Engineering  
+Fakultät 04  
 Hochschule München
 
 Schlüssel/Schloss Management
