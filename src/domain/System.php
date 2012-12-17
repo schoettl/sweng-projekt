@@ -1,5 +1,5 @@
 <?php
-require_once '../class/DBAccess.php';
+require_once __DIR__.'/../class/DBAccess.php';
 require_once 'Key.php';
 require_once 'Lock.php';
 require_once 'KeyProgrammer.php';
@@ -16,6 +16,29 @@ class System {
     private $kp1; // KeyProgrammer
     private $lps; // LockProgrammerSynchronizer
     private $as;  // AccessSystem    
+    
+    /**
+     * Set the instance of this class by simply setting the
+     * session variable. The session must be started!
+     * 
+     * @param System $system
+     */
+    static function setInstance($system)
+    {
+        $_SESSION['system'] = $system;
+    }
+    
+    /**
+     * Return the instance of this class by simply getting it
+     * from the session. The session must be started and the
+     * session variable must be set!
+     * 
+     * @return System
+     */
+    static function getInstance()
+    {
+        return $_SESSION['system'];
+    }
     
     function __construct()
     {

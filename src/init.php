@@ -2,7 +2,7 @@
 require_once 'class/DBAccess.php';
 require_once 'domain/System.php';
 
-start_session();
+session_start();
 
 try {
 
@@ -13,9 +13,9 @@ try {
     $dbh->exec("DELETE access WHERE AccessId IS NOT NULL");
     $dbh->exec("UPDATE `lock` SET last_change = NOW(), last_sync = NULL 
         WHERE LockId IS NOT NULL"); // last_change wird bei Aenderung zwar autom.
-        //aktualisiert, aber eben nur bei AENDERUNG. Deswegen explizit.
+        // aktualisiert, aber eben nur bei AENDERUNG. Deswegen explizit.
 
-    $_SESSION['system'] = new System();
+    System::setInstance(new System());
     
     $success = true;
 } catch (Exception $e) {

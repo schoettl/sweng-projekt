@@ -1,13 +1,14 @@
 <?php
 class LockProgrammer
 {
+    // TODO eigentlich ein array! schlechter name
     private $list; // Liste mit LockProgrammerConfig Objekten
     private $it;
     
     function __construct()
     {
         $list = array();
-        $it = $list->getIterator();
+        $it = new ArrayIterator();
     }
     
     function program($lock)
@@ -53,6 +54,6 @@ class LockProgrammer
     function setConfigList($list)
     {
         $this->list = $list;
-        $it = $list->getIterator();
+        $it = new ArrayIterator($list); //$list->getIterator();
     }
 }
