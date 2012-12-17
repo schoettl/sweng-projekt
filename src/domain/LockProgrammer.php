@@ -7,8 +7,8 @@ class LockProgrammer
     
     function __construct()
     {
-        $list = array();
-        $it = new ArrayIterator();
+        $this->list = array();
+        $this->it = new ArrayIterator();
     }
     
     function program($lock)
@@ -19,7 +19,7 @@ class LockProgrammer
             if ($cfg->lockId == $lock->getLockId()) {                
                 $lock->setConfig($cfg->lockConfig);
                 $cfg->inSync = true;
-                $it = $i; // iterator fuer location neu setzen
+                $this->it = $i; // iterator fuer location neu setzen
                 break;
             }
             $i->next();
@@ -31,19 +31,19 @@ class LockProgrammer
     function nextLocation()
     {
         // weiter in liste, alle mit inSync == true ueberspringen
-        while ($it->valid() && $it->current()->inSync) {
-            $it->next();
+        while ($this->it->valid() && $this->it->current()->inSync) {
+            $this->it->next();
         }
         // location zurueckgeben
-        if ($it->valid()) {
-            return $it->current()->location();
+        if ($this->it->valid()) {
+            return $this->it->current()->location();
         }
         return false;
     }
     
     function rewindLocation()
     {
-        $it->rewind();
+        $this->it->rewind();
     }
     
     function getConfigList()
@@ -54,6 +54,6 @@ class LockProgrammer
     function setConfigList($list)
     {
         $this->list = $list;
-        $it = new ArrayIterator($list); //$list->getIterator();
+        $this->it = new ArrayIterator($list); //$list->getIterator();
     }
 }
