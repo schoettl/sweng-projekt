@@ -1,12 +1,70 @@
+<?php
+/**
+ * GET Params koennen sein: lockid
+ * 
+ */
+require_once '../lib/stdio.php';
+require_once '../lib/DBAccess.php';
+require_once '../domain/System.php';
+
+session_start();
+
+$err = array();
+$dbh = new DBAccess();
+$system = System::getInstance();
+$lp = $system->getLockProgrammer1();
+
+$lockid = getVarFromPostOrGet('lockid');
+$location = $lp->nextLocation();
+
+if (!$lockid) $err[] = 'Kein Schloss ausgewählt.';
+
+if (!$err) {
+    $lock = $system->getLock($lockid);
+    if (!$lock) $err[] = 'Ungültige LockId.';    
+}
+
+?>
 <!DOCTYPE html>
 <html>
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-        <title>Schloss</title>
+        <title>Schloss-Programmiergerät</title>
     </head>
     <body>
+        <h1>Schloss-Programmiergerät</h1>
         <?php
-        // put your code here
+        foreach ($err as $e)
+            echo '<div>' . xsafe($e) . '</div>'; // div id und css fuer error messages
         ?>
+        <form method="POST" >            
+            <table>
+                <tr>
+                    <td><input type="submit" name="next" value="Nächstes" /></td>                    
+                    <td><?php echo '<a href="lock.php?lockid=' . $lockid . '" >' . xsafe($location) . '</a>'; ?></td>
+                </tr>
+                <tr>
+                    <td><input type="submit" name="program" value="Programmieren" /></td>                    
+                </tr>
+                <tr>
+                    <td><input type="submit" name="rewind" value="Von vorne" /> (nur nicht-synchronisierte)</td>
+                </tr>
+            </table>
+            <table>
+                <tr>            
+                    <td>LockId:</td>
+                    <td><input type="text" name="lockid" value="<?php xecho($lockid); ?>"/></td>
+                    <td><input type="submit" name="apply" value="Schloss auswählen" /></td>
+                </tr>
+                <tr>
+                    <td>
+                        <?php xecho($location); echo '<a href="lock.php?lockid=' . $lockid . '" >
+                            <img src="a' . /* TODO einfache zahl-url-zuordnung */
+                            'alt="Denk\' dir schönes Bild einer Türe mit einem Schloss." /></a>';
+                        ?>
+                    </td>
+                </tr>
+            </table>
+        </form>
     </body>
 </html>
