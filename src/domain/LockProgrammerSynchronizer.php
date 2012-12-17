@@ -1,5 +1,5 @@
 <?php
-require_once __DIR__.'/../class/DBAccess.php';
+require_once __DIR__.'/../lib/DBAccess.php';
 
 class LockProgrammerSynchronizer
 {

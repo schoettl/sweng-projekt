@@ -1,7 +1,9 @@
 <?php
-require_once __DIR__.'/../class/DBAccess.php';
+require_once __DIR__.'/../lib/DBAccess.php';
 require_once 'Key.php';
-require_once 'Lock.php';
+require_once 'ActiveKey.php';
+require_once 'PassiveKey.php';
+require_once __DIR__.'/Lock.php';
 require_once 'KeyProgrammer.php';
 require_once 'LockProgrammer.php';
 require_once 'LockProgrammerSynchronizer.php';
@@ -86,10 +88,9 @@ class System {
         }
         
         $dbh = new DBAccess();
-        $result = $dbh->pcount("SELECT LockId FROM `lock` WHERE LockId = ?", $id);
-        $row = $result->fetchObject();
-        if ($row) {
-            $lock = new Lock($row->LockId);
+        $count = $dbh->pcount('`lock`', "LockId = ?", $id);
+        if ($count > 0) {
+            $lock = new Lock($id);
             
             $this->locks[$id] = $lock;
             return $lock;

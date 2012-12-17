@@ -4,10 +4,10 @@ class LockConfig
     public $accessList;
     public $whiteList;
     public $blackList;
-    function __construct($accessList = array(), $whiteList = array(), $blackList = array())
+    function __construct($accessList = null, $whiteList = null, $blackList = null)
     {
-        $this->accessList = $accessList;
-        $this->whiteList = $whiteList;
-        $this->blackList = $blackList;
+        $this->accessList = $accessList ? $accessList : array();
+        $this->whiteList = $whiteList ? $whiteList : array();
+        $this->blackList = $blackList ? $blackList : array();
     }
 }

@@ -1,5 +1,5 @@
 <?php
-require_once 'class/DBAccess.php';
+require_once 'lib/DBAccess.php';
 require_once 'domain/System.php';
 
 session_start();

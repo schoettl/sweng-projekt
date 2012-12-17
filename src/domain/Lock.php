@@ -1,4 +1,6 @@
 <?php
+require_once 'LockConfig.php';
+
 class Lock
 {
     private $lockId;
@@ -6,6 +8,7 @@ class Lock
     function __construct($lockId)
     {
         $this->lockId = $lockId;
+        $this->config = new LockConfig();
     }
     function getLockId()
     {
@@ -13,6 +16,10 @@ class Lock
     }
     function unlock($key)
     {
+        if ($key instanceof ActiveKey) {
+            // TODO erstmal active key config ueberpruefen
+        }
+        
         // auf blacklist: return false
         if (in_array($key->getKeyId(), $this->config->blackList))
             return false;
