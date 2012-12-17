@@ -6,8 +6,8 @@ class LockConfig
     public $blackList;
     function __construct($accessList = null, $whiteList = null, $blackList = null)
     {
-        $this->accessList = $accessList ? $accessList : array();
-        $this->whiteList = $whiteList ? $whiteList : array();
-        $this->blackList = $blackList ? $blackList : array();
+        $this->accessList = isset($accessList) ? $accessList : array();
+        $this->whiteList = isset($whiteList) ? $whiteList : array();
+        $this->blackList = isset($blackList) ? $blackList : array();
     }
 }
