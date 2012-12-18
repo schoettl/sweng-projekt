@@ -90,7 +90,7 @@ CREATE  TABLE IF NOT EXISTS `sweng_projekt`.`access` (
   `AccessId` INT NOT NULL COMMENT 'AccessId aus AccessSystem (aka Buchungssystem)!' ,
   `LockId` INT NOT NULL ,
   `KeyId` INT NOT NULL COMMENT 'Wenn key Aktiv: Zugang wird auf key gespeichert!\\nWenn key nicht Aktiv: Zugang wird in lock gespeichert!' ,
-  `Begin` DATE NULL ,
+  `Begin` DATE NOT NULL ,
   `End` DATE NULL ,
   PRIMARY KEY (`AccessId`) ,
   INDEX `fk_access_lock2_idx` (`LockId` ASC) ,
