@@ -39,7 +39,7 @@ try {
         if ($success) {
             echo 'Initialisierung erfolgreich!';
         } else {
-            echo 'Fehler: ' . htmlentities($err);
+            echo '<div class="err" >Fehler: ' . htmlentities($err) . '</div>';
             echo '<p><a href="init.php">Nochmal versuchen ...</a></p>';
         }
         ?>

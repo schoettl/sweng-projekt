@@ -49,7 +49,7 @@ if (!$err) {
         <form method="POST" >
             <?php
             foreach ($err as $e)
-                echo '<div>' . xsafe($e) . '</div>'; // div id und css fuer error messages
+                echo '<div class="err" >' . xsafe($e) . '</div>'; // div id und css fuer error messages
             ?>
             <table>
                 <tr>            
@@ -66,7 +66,7 @@ if (!$err) {
             </table>
             <?php
             if (!$locked)
-                echo '<div>Die Türe wurde aufgesperrt! Das war der richtige Schlüssel.</div>';
+                echo '<div class="succ" >Die Türe wurde aufgesperrt! Das war der richtige Schlüssel.</div>';
             ?>
         </form>
            

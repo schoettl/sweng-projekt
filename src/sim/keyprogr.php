@@ -42,7 +42,7 @@ $key = $kp->getKey();
         <form method="POST" >
             <?php
             foreach ($err as $e)
-                echo '<div>' . xsafe($e) . '</div>'; // div id und css fuer error messages
+                echo '<div class="err" >' . xsafe($e) . '</div>'; // div id und css fuer error messages
             ?>
             KeyId: <input type="text" name="keyid" value="<?php xecho($keyid); ?>" />
             <input type="submit" name="attach" value="Schlüssel auflegen" />

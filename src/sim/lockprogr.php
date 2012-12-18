@@ -46,7 +46,7 @@ if ($location === false) $err[] = 'Keine weiteren Schlösser zu synchronisieren.
         <h1>Schloss-Programmiergerät</h1>
         <?php
         foreach ($err as $e)
-            echo '<div>' . xsafe($e) . '</div>'; // div id und css fuer error messages
+            echo '<div class="err" >' . xsafe($e) . '</div>'; // div id und css fuer error messages
         ?>
         <form method="POST" >
             <input type="hidden" name="lockid" value="<?php xecho($lockid); /* damit die lock id nicht verloren geht */ ?>" />

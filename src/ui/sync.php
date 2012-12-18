@@ -32,7 +32,7 @@ if (getVarFromPost('sync')) {
         </form>
         <?php
         if ($success) {
-            echo '<div>Das Schloss-Programmiergerät wurde synchronisiert.</div>';
+            echo '<div class="succ" >Das Schloss-Programmiergerät wurde synchronisiert.</div>';
         }
         ?>
     </body>

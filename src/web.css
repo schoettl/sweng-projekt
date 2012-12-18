@@ -3,3 +3,10 @@ body {
 /*	color: navy;*/
 }
 
+.err {
+	color: red;
+}
+
+.succ {
+	color: green;
+}

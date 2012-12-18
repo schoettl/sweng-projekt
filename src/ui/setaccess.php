@@ -85,7 +85,7 @@ if ($get || $set) {
         <form method="POST" >
             <?php
             foreach ($err as $e)
-                echo '<div>' . xsafe($e) . '</div>'; // div id und css fuer error messages
+                echo '<div class="err" >' . xsafe($e) . '</div>'; // div id und css fuer error messages
             ?>
             <table>
                 <tr>
@@ -131,7 +131,7 @@ if ($get || $set) {
             <input type="submit" name="set" value="Zugang erstellen/ändern" />
             <?php
             if ($success) {
-                echo '<div>Der Zugang für den Schlüssel wurde erstellt bzw. geändert.</div>';
+                echo '<div class="succ" >Der Zugang für den Schlüssel wurde erstellt bzw. geändert.</div>';
                 if ($key instanceof PassiveKey) {
                     echo '<div>Das Schloss noch neu programmiert werden (wegen passivem Schlüssel).</div>';
                 }
