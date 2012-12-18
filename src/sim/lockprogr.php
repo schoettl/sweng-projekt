@@ -15,14 +15,23 @@ $system = System::getInstance();
 $lp = $system->getLockProgrammer1();
 
 $lockid = getVarFromPostOrGet('lockid');
-$location = $lp->nextLocation();
 
-if (!$lockid) $err[] = 'Kein Schloss ausgewählt.';
-
-if (!$err) {
-    $lock = $system->getLock($lockid);
-    if (!$lock) $err[] = 'Ungültige LockId.';    
+$lock = $system->getLock($lockid);
+if (!$lock) {
+    $err[] = 'Ungültige LockId.';
+} else if (getVarFromPost('program')) {
+    $lp->program($lock);
 }
+
+if (getVarFromPost('next')) {
+    $lp->nextLocation();
+} else if (getVarFromPost('rewind')) {
+    $lp->rewindLocation();
+}
+
+$location = $lp->currentLocation();
+
+if ($location === false) $err[] = 'Keine weiteren Schlösser zu synchronisieren. Probieren Sie "Von vorne", falls Sie Schlösser übersprungen haben.';
 
 ?>
 <!DOCTYPE html>
@@ -37,7 +46,8 @@ if (!$err) {
         foreach ($err as $e)
             echo '<div>' . xsafe($e) . '</div>'; // div id und css fuer error messages
         ?>
-        <form method="POST" >            
+        <form method="POST" >
+            <input type="hidden" name="lockid" value="<?php xecho($lockid); /* damit die lock id nicht verloren geht */ ?>" />
             <table>
                 <tr>
                     <td><input type="submit" name="next" value="Nächstes" /></td>                    
@@ -59,7 +69,7 @@ if (!$err) {
                 <tr>
                     <td>
                         <?php xecho($location); echo '<a href="lock.php?lockid=' . $lockid . '" >
-                            <img src="a' . /* TODO einfache zahl-url-zuordnung */
+                            <img src="../img/lock' . ($lockid % 5) .
                             'alt="Denk\' dir schönes Bild einer Türe mit einem Schloss." /></a>';
                         ?>
                     </td>
