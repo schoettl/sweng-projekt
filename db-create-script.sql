@@ -15,7 +15,7 @@ CREATE  TABLE IF NOT EXISTS `sweng_projekt`.`lock` (
   `LockId` INT NOT NULL AUTO_INCREMENT ,
   `Location` VARCHAR(45) NOT NULL ,
   `last_change` TIMESTAMP NOT NULL COMMENT 'Wann hat sich in der DB beim Schloss das letzte Mal was geändert?' ,
-  `last_snyc` TIMESTAMP NULL COMMENT 'Wann wurde für das Schloss der Stand der DB das letzte mal aufs Programmiergerät übertragen?' ,
+  `last_sync` TIMESTAMP NULL COMMENT 'Wann wurde für das Schloss der Stand der DB das letzte mal aufs Programmiergerät übertragen?' ,
   PRIMARY KEY (`LockId`) ,
   UNIQUE INDEX `Location_UNIQUE` (`Location` ASC) )
 ENGINE = InnoDB;
