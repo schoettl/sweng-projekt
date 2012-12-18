@@ -33,7 +33,7 @@ try {
         <title>sweng-projekt: Initialisierung</title>
     </head>
     <body>
-        <h1>sweng-projekt: Initialisierung</h1>
+        <h1>Initialisierung</h1>
         <?php
         if ($success) {
             echo 'Initialisierung erfolgreich!';
@@ -42,6 +42,6 @@ try {
             echo '<p><a href="init.php">Nochmal versuchen ...</a></p>';
         }
         ?>
-        <p><a href="./">Zurück zur Startseite</a></p>
+        <!-- <p><a href="./">Zurück zur Startseite</a></p> -->
     </body>
 </html>

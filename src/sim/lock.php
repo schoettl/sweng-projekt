@@ -41,7 +41,7 @@ if (!$err) {
 <html>
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-        <title>Schloss</title>
+        <title>Lock</title>
     </head>
     <body>
         <h1>Schloss</h1>

@@ -39,7 +39,7 @@ if ($location === false) $err[] = 'Keine weiteren Schlösser zu synchronisieren.
 <html>
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-        <title>Schloss-Programmiergerät</title>
+        <title>Lock Programmer</title>
     </head>
     <body>
         <h1>Schloss-Programmiergerät</h1>
