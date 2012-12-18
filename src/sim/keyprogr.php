@@ -34,6 +34,7 @@ $key = $kp->getKey();
 <html>
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+        <link rel="stylesheet" tyep="text/css" href="../web.css" />
         <title>KeyProgrammer</title>
     </head>
     <body>

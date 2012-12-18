@@ -39,6 +39,7 @@ if ($location === false) $err[] = 'Keine weiteren Schlösser zu synchronisieren.
 <html>
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+        <link rel="stylesheet" tyep="text/css" href="../web.css" />
         <title>Lock Programmer</title>
     </head>
     <body>
