@@ -13,7 +13,7 @@ class LockProgrammer
     
     function program($lock)
     {
-        $i = new ArrayIterator($list);
+        $i = new ArrayIterator($this->list);
         while ($i->valid()) {
             $cfg = $i->current();
             if ($cfg->lockId == $lock->getLockId()) {                
