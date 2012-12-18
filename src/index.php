@@ -6,7 +6,7 @@
     </head>
     <body>
         <h1>Startseite</h1>
-        Folgende Seiten werden automatisch in einem neuen Tab geöffnet.
+        Folgende Seiten werden automatisch auf einer neuen Seite geöffnet.
         <ul>
             <li><a href="init.php" target="_blank">System initialisieren: Das ganze System auf den Anfangszustand zurücksetzen und initialisieren</a></li>
             <li><a href="ui/" target="_blank">Zur Benutzeroberfläche: Die GUI, so wie sie den Anwendern in Hotel oder Firma zur Verfügung steht</a></li>
