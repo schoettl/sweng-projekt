@@ -58,7 +58,10 @@ class LockProgrammer
     
     function rewindLocation()
     {
-        $this->it->rewind();
+        $it = $this->it;
+        $it->rewind();
+        if ($it->valid() && $it->current()->inSync)
+            $this->nextLocation();
     }
     
     function getConfigList()
