@@ -21,6 +21,7 @@ if (!$lock) {
     $err[] = 'Ungültige LockId.';
 } else if (getVarFromPost('program')) {
     $lp->program($lock);
+    $lp->nextLocation();
 }
 
 if (getVarFromPost('next')) {
