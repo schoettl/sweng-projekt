@@ -17,6 +17,8 @@ try {
 
     System::setInstance(new System());
     
+    $_SESSION['accessEntryList'] = array();
+    
     $success = true;
 } catch (Exception $e) {
     $success = false;
