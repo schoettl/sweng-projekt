@@ -11,6 +11,7 @@ require_once '../domain/PassiveKey.php';
 session_start();
 
 $err = array();
+$dbh = new DBAccess();
 $system = System::getInstance();
 
 $key = $system->getKeyProgrammer1()->getKey();
@@ -24,10 +25,21 @@ if (!$keyid && $key) {
 
 $success = false;
 if (getVarFromPost('set')) {
-    $accessEntry = $system->getAccessSystem()->getAccessEntry($accessid);
-    $key = $system->getKey($keyid);
-    if (!$accessEntry) $err[] = 'Ungültige AccessId.';
-    if (!$key) $err[] = 'Ungültige KeyId.';
+    // Überprüfung von access id
+    $accessEntry = $system->getAccessSystem()->getAccessEntry($accessid);    
+    if (!$accessEntry) $err[] = 'Ungültige AccessId.';    
+    
+    // Überprüfung von key id
+    if (!$keyid) {
+        // Schluessel nicht gegeben, d.h. Zugang "in Abwesenheit" des Keys ändern
+        // Geht nur wenn's schon einen Zugang mit AccessId gibt
+        $result = $dbh->pquery('SELECT KeyId FROM access WHERE AccessId = ?', $accessid);
+        $keyid = $result->fetchColumn();
+        if (!$keyid) $err[] = 'Ungültige KeyId. Das Feld KeyId kann nur dann freigelassen werden, wenn bereits ein Zugang zu AccessId existiert.';
+    } else {
+        $key = $system->getKey($keyid);
+        if (!$key) $err[] = 'Ungültige KeyId.';
+    }
     
     if (!$err) {
         // TODO testen: akt. gültige andere Zugänge für key? unsynchronisierte locks zu key?
