@@ -54,7 +54,7 @@
 			CodeGeneration
 		</plugin>
 </profile>
-<XMI xmi.version = '1.2' xmlns:UML = 'org.omg.xmi.namespace.UML' timestamp = 'Mon Dec 17 14:45:15 CET 2012'>
+<XMI xmi.version = '1.2' xmlns:UML = 'org.omg.xmi.namespace.UML' timestamp = 'Tue Dec 18 14:28:10 CET 2012'>
   <XMI.header>    <XMI.documentation>
       <XMI.exporter>ArgoUML (using Netbeans XMI Writer version 1.0)</XMI.exporter>
       <XMI.exporterVersion>0.34(6) revised on $Date: 2010-01-11 22:20:14 +0100 (Mon, 11 Jan 2010) $ </XMI.exporterVersion>
@@ -552,6 +552,19 @@
                   <UML:BehavioralFeature.parameter>
                     <UML:Parameter xmi.id = '-64--88-56-1-671a62a5:13b81e13f71:-8000:0000000000000B60'
                       name = 'return' isSpecification = 'false' kind = 'return'/>
+                  </UML:BehavioralFeature.parameter>
+                </UML:Operation>
+                <UML:Operation xmi.id = '-64--88-56-1--36293ebc:13bae328285:-8000:0000000000000BA0'
+                  name = 'currentLocation' visibility = 'public' isSpecification = 'false'
+                  ownerScope = 'instance' isQuery = 'false' concurrency = 'sequential' isRoot = 'false'
+                  isLeaf = 'false' isAbstract = 'false'>
+                  <UML:BehavioralFeature.parameter>
+                    <UML:Parameter xmi.id = '-64--88-56-1--36293ebc:13bae328285:-8000:0000000000000BA1'
+                      name = 'return' isSpecification = 'false' kind = 'return'>
+                      <UML:Parameter.type>
+                        <UML:DataType href = 'http://argouml.org/profiles/uml14/default-uml14.xmi#-84-17--56-5-43645a83:11466542d86:-8000:000000000000087E'/>
+                      </UML:Parameter.type>
+                    </UML:Parameter>
                   </UML:BehavioralFeature.parameter>
                 </UML:Operation>
               </UML:Classifier.feature>
@@ -3200,7 +3213,7 @@
     </group>
   </group>
   <group name="Fig10"
-       description="org.argouml.uml.diagram.static_structure.ui.FigClass[856, 328, 172, 139]pathVisible=false;stereotypeView=0;operationsVisible=true;attributesVisible=true;"
+       description="org.argouml.uml.diagram.static_structure.ui.FigClass[856, 328, 172, 156]pathVisible=false;stereotypeView=0;operationsVisible=true;attributesVisible=true;"
        href="-64--88-56-1--4e692d16:13b3e746022:-8000:00000000000008A1"
        fill="1"
        fillcolor="white"
@@ -3215,7 +3228,7 @@
       x="856"
       y="328"
       width="172"
-      height="139"
+      height="156"
       fill="1"
       fillcolor="white"
       stroke="1"
@@ -3303,7 +3316,7 @@
       strokecolor="black"
     />
     <group name="Fig10.6"
-         description="org.argouml.uml.diagram.ui.FigOperationsCompartment[857, 374, 170, 93]"
+         description="org.argouml.uml.diagram.ui.FigOperationsCompartment[857, 374, 170, 110]"
          href="-64--88-56-1--4e692d16:13b3e746022:-8000:00000000000008A1"
          fill="0"
          fillcolor="white"
@@ -3317,7 +3330,7 @@
         x="857"
         y="374"
         width="170"
-        height="93"
+        height="110"
         fill="0"
         fillcolor="white"
         stroke="0"
@@ -3391,7 +3404,7 @@
         x="857"
         y="442"
         width="170"
-        height="23"
+        height="17"
         fill="0"
         fillcolor="white"
         stroke="0"
@@ -3403,6 +3416,22 @@
         textsize="12"
         justification="Left"
       >rewindLocation()</text>
+      <text name="Fig10.6.6"
+        x="857"
+        y="459"
+        width="170"
+        height="23"
+        fill="0"
+        fillcolor="white"
+        stroke="0"
+        strokecolor="black"
+        textcolor="black"
+        font="Dialog"
+        italic="false"
+        bold="false"
+        textsize="12"
+        justification="Left"
+      >currentLocation() : String</text>
     </group>
   </group>
   <group name="Fig11"

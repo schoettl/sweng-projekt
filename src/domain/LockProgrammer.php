@@ -30,14 +30,29 @@ class LockProgrammer
     
     function nextLocation()
     {
-        // weiter in liste, alle mit inSync == true ueberspringen
-        while ($this->it->valid() && $this->it->current()->inSync) {
-            $this->it->next();
+        $it = $this->it;
+        
+        if (!$it->valid())
+            return false;
+        
+        if ($it->current()->inSync) {
+            // weiter in liste, alle mit inSync == true ueberspringen
+            while ($it->valid() && $it->current()->inSync) {
+                $it->next();
+            }
+        } else {
+            // not inSync: trotzdem eins weiter
+            $it->next();
         }
+        
         // location zurueckgeben
-        if ($this->it->valid()) {
+        return $this->currentLocation();
+    }
+    
+    function currentLocation()
+    {
+        if ($this->it->valid())
             return $this->it->current()->location();
-        }
         return false;
     }
     
