@@ -1,5 +1,7 @@
 <?php
 require_once __DIR__.'/../lib/DBAccess.php';
+require_once __DIR__.'/LockProgrammerConfig.php';
+require_once __DIR__.'/AccessListItem.php';
 
 class LockProgrammerSynchronizer
 {
@@ -18,7 +20,7 @@ class LockProgrammerSynchronizer
         
         // Von DB auf Programmiergeraet
         $list = array();
-        $locks = $dbh->query("SELECT LockId, Location FROM `lock` WHERE last_change > last_sync");
+        $locks = $dbh->query("SELECT LockId, Location FROM `lock` WHERE last_change > last_sync OR last_sync IS NULL");
         while ($lock = $locks->fetchObject()) {            
             $wlres = $dbh->pquery("SELECT KeyId FROM whitelist WHERE LockId = ?", $lock->LockId);
             $blres = $dbh->pquery("SELECT KeyId FROM blacklist WHERE LockId = ?", $lock->LockId);
