@@ -24,7 +24,7 @@ class LockProgrammerSynchronizer
         while ($lock = $locks->fetchObject()) {            
             $wlres = $dbh->pquery("SELECT KeyId FROM whitelist WHERE LockId = ?", $lock->LockId);
             $blres = $dbh->pquery("SELECT KeyId FROM blacklist WHERE LockId = ?", $lock->LockId);
-            $alres = $dbh->pquery("SELECT KeyId, Begin, End FROM access NATURAL LEFT JOIN `key` WHERE Aktiv = FALSE AND LockId = ?", $lock->LockId);
+            $alres = $dbh->pquery("SELECT KeyId, Begin, End FROM access NATURAL JOIN `key` WHERE Aktiv = FALSE AND LockId = ?", $lock->LockId);
             // LockConfig anlegen
             $wl = array();
             $bl = array();
