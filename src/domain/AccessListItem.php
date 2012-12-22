@@ -10,4 +10,8 @@ class AccessListItem
         $this->begin  = $begin;
         $this->end    = $end;
     }
+    function __toString()
+    {
+        return $this->keyId . ' (' . $this->begin . ' – ' . $this->end . ')';
+    }
 }
