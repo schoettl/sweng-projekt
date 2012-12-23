@@ -33,12 +33,14 @@ $key = $kp->getKey();
 <!DOCTYPE html>
 <html>
     <head>
-        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+        <meta charset="UTF-8">
         <link rel="stylesheet" tyep="text/css" href="../web.css" />
         <title>KeyProgrammer</title>
     </head>
     <body>
-        <h1>Key-Reader bzw. -Programmer</h1>
+        <h1>KeyProgrammer</h1>
+        <img src="https://www.pcounter-germany.com/UserFiles2/Images/Loesungen/CS_Kartenleser_SXL.jpg" alt="Ein schönes Bild eines Kartenlesegeräts">
+        <p>Dies ist das Lese- und Programmiergerät für die Schlüssel. Es ist per USB mit dem Computer verbunden. Hier kann man einen Schlüssel auf das Gerät legen bzw. ihn wieder wegnehmen.</p>
         <form method="POST" >
             <?php
             foreach ($err as $e)
