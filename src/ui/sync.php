@@ -12,6 +12,7 @@ if (getVarFromPost('sync')) {
     $lps = $system->getLockProgrammerSynchronizer();
     $lp  = $system->getLockProgrammer1();
     $lps->synchronize($lp);
+    $count = count($lp->getConfigList());
     $success = true; // wenn synchronize keine Exception wirft
 }
 
@@ -19,21 +20,20 @@ if (getVarFromPost('sync')) {
 <!DOCTYPE html>
 <html>
     <head>
-        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+        <meta charset="UTF-8">
         <link rel="stylesheet" tyep="text/css" href="../web.css" />
         <title>Sync LockProgrammer</title>
     </head>
     <body>
         <h1>Schloss-Programmiergerät synchronisieren</h1>
-        Bitte überprüfen Sie, ob das Programmiergerät mit dem Computer verbunden ist (via USB).
-        &ndash; Wird schon passen.
+        <p>Bitte überprüfen Sie, ob das Programmiergerät mit dem Computer verbunden ist.</p>
         <form method="POST" >
             <input type="submit" name="sync" value="Synchronisieren" />
         </form>
         <?php
         if ($success) {
-            echo '<div class="succ" >Das Schloss-Programmiergerät wurde synchronisiert.</div>';
-        }
+            echo '<div class="succ" >Das Schloss-Programmiergerät wurde synchronisiert. Es wurden Aktualisierungen für ' . $count . ' Schlösser übertragen.</div>';
+        }        
         ?>
     </body>
 </html>
