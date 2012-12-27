@@ -3,26 +3,25 @@ class LockProgrammer
 {
     // TODO eigentlich ein array! schlechter name
     private $list; // Liste mit LockProgrammerConfig Objekten
-    private $it;
+    private $currentIndex;
     
     function __construct()
     {
         $this->list = array();
-        $this->it = new ArrayIterator();
+        $this->currentIndex = 0;
     }
     
     function program($lock)
     {
-        $i = new ArrayIterator($this->list);
-        while ($i->valid()) {
-            $cfg = $i->current();
+        $i = 0;
+        foreach ($this->list as $cfg) {            
             if ($cfg->lockId == $lock->getLockId()) {                
                 $lock->setConfig($cfg->lockConfig);
                 $cfg->inSync = true;
-                $this->it = $i; // iterator fuer location neu setzen
+                $this->currentIndex = $i;
                 break;
             }
-            $i->next();
+            $i++;
         }
         // Wenn keine updates fuer $lock da:
         // auch kein problem!
@@ -30,10 +29,10 @@ class LockProgrammer
     
     function nextLocation()
     {
-        $it = $this->it;
-        $it->next();
-        while ($it->valid() && $it->current()->inSync) {
-            $it->next();
+        $this->currentIndex++;
+        while ($this->currentIndex < count($this->list) 
+            && $this->list[$this->currentIndex]->inSync) {
+            $this->currentIndex++;
         }
                 
         // location zurueckgeben
@@ -42,16 +41,16 @@ class LockProgrammer
     
     function currentLocation()
     {
-        if ($this->it->valid())
-            return $this->it->current()->location;
+        if ($this->currentIndex < count($this->list))
+            return $this->list[$this->currentIndex]->location;
         return false;
     }
     
     function rewindLocation()
     {
-        $it = $this->it;
-        $it->rewind();
-        if ($it->valid() && $it->current()->inSync) {
+        $this->currentIndex = 0;
+        if ($this->currentIndex < count($this->list) 
+            && $this->list[$this->currentIndex]->inSync) {
             // gueltig, aber schon inSync:
             $this->nextLocation();
         }        
@@ -65,6 +64,6 @@ class LockProgrammer
     function setConfigList($list)
     {
         $this->list = $list;
-        $this->it = new ArrayIterator($this->list);
+        $this->currentIndex = 0;
     }
 }
