@@ -46,6 +46,7 @@ if (!$err) {
     </head>
     <body>
         <h1>Schloss</h1>
+        Nicht vergessen: Das Schloss muss vorher durch das <a href="lockprogr.php?lockid=<?php xecho($lockid); ?>">Schloss-Programmiergerät programmiert</a> worden sein.
         <form method="POST" >
             <?php
             foreach ($err as $e)
@@ -77,7 +78,7 @@ if (!$err) {
             </table>
             <?php
             if (!$locked)
-                echo '<div class="succ" >Die Türe wurde aufgesperrt! Das war der richtige Schlüssel.</div>';
+                echo '<div class="succ">Die Türe wurde aufgesperrt! Das war der richtige Schlüssel.</div>';
             ?>
         </form>
            
