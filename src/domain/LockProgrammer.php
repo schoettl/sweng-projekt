@@ -31,20 +31,11 @@ class LockProgrammer
     function nextLocation()
     {
         $it = $this->it;
-        
-        if (!$it->valid())
-            return false;
-        
-        if ($it->current()->inSync) {
-            // weiter in liste, alle mit inSync == true ueberspringen
-            while ($it->valid() && $it->current()->inSync) {
-                $it->next();
-            }
-        } else {
-            // not inSync: trotzdem eins weiter
+        $it->next();
+        while ($it->valid() && $it->current()->inSync) {
             $it->next();
         }
-        
+                
         // location zurueckgeben
         return $this->currentLocation();
     }
@@ -52,7 +43,7 @@ class LockProgrammer
     function currentLocation()
     {
         if ($this->it->valid())
-            return $this->it->current()->location();
+            return $this->it->current()->location;
         return false;
     }
     
@@ -60,8 +51,10 @@ class LockProgrammer
     {
         $it = $this->it;
         $it->rewind();
-        if ($it->valid() && $it->current()->inSync)
+        if ($it->valid() && $it->current()->inSync) {
+            // gueltig, aber schon inSync:
             $this->nextLocation();
+        }        
     }
     
     function getConfigList()
@@ -72,6 +65,6 @@ class LockProgrammer
     function setConfigList($list)
     {
         $this->list = $list;
-        $this->it = new ArrayIterator($list); //$list->getIterator();
+        $this->it = new ArrayIterator($this->list);
     }
 }
