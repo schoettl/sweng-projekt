@@ -40,7 +40,7 @@ if (!$err) {
 <!DOCTYPE html>
 <html>
     <head>
-        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+        <meta charset="UTF-8">
         <link rel="stylesheet" tyep="text/css" href="../web.css" />
         <title>Lock</title>
     </head>
@@ -53,8 +53,19 @@ if (!$err) {
             ?>
             <table>
                 <tr>            
-                    <td>LockId:</td>
-                    <td><input type="text" name="lockid" value="<?php xecho($lockid); ?>"/></td>
+                    <td>Lock Location:</td>
+                    <td>
+                        <select name="lockid">
+                            <?php
+                            $result = $dbh->query("SELECT LockId, Location FROM `lock` ORDER BY Location");
+                            while ($row = $result->fetchObject()) {
+                                echo '<option value="' . $row->LockId . '"' .
+                                    (($row->LockId == $lockid) ? ' selected' : '') . '>' . 
+                                    $row->Location . '</option>';
+                            }
+                            ?>
+                        </select>
+                    </td>
                     <td><input type="submit" name="apply" value="Schloss auswählen" /></td>
                 </tr>
                 <tr>
@@ -76,20 +87,17 @@ if (!$err) {
             $result = $dbh->pquery("SELECT location FROM `lock` WHERE LockId = ?", $lockid);            
             $location = $result->fetchColumn();
             $lock = $system->getLock($lockid);
-            // TODO hier koennte man die config von lock $anzeigen
-        ?>
-        <h2><?php echo 'LockId: ' . xsafe($lockid) . '<br />' . xsafe($location) ?></h2>
-        <table>
-            <tr>
-                <td><img src="a<?php /* TODO einfache zahl-url-zuordnung */ ?>" alt="Denk' dir schönes Bild einer Türe mit einem Schloss." /></td>
-                <td>
-                    <h3><?php echo "Status: " . ($locked ? "Locked" : "Unlocked"); ?></h3>
-                    <h3>LockConfig</h3>
-                    Hier könnte die Schlosskonfiguration ausgegeben werden.
-                </td>
-            </tr>
-        </table>
-        <?php
+            echo '<table><tr><th>Schlossdaten</th></tr>';
+            
+            echo '<tr><td>LockId:</td>  <td>' . xsafe($lockid)   . '</td></tr>';
+            echo '<tr><td>Location:</td><td>' . xsafe($location) . '</td></tr>';
+            echo '<tr><td>Status:</td>  <td>' . ($locked ? "Locked" : "Unlocked") . '</td></tr>';
+            
+            echo '<tr><td>Keys auf white list:</td> <td>' . implode(', ', $lock->getConfig()->whiteList)  . '</td></tr>';
+            echo '<tr><td>Keys auf black list:</td> <td>' . implode(', ', $lock->getConfig()->blackList)  . '</td></tr>';            
+            echo '<tr><td>Keys auf access list:</td><td>' . implode(', ', $lock->getConfig()->accessList) . '</td></tr>';
+            
+            echo '</table>';
         }
         ?>
         
