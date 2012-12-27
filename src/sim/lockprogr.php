@@ -1,8 +1,4 @@
 <?php
-/**
- * GET Params koennen sein: lockid
- * 
- */
 require_once '../lib/stdio.php';
 require_once '../lib/DBAccess.php';
 require_once '../domain/System.php';
@@ -14,7 +10,7 @@ $dbh = new DBAccess();
 $system = System::getInstance();
 $lp = $system->getLockProgrammer1();
 
-$lockid = getVarFromPostOrGet('lockid');
+$lockid = getVarFromPost('lockid');
 $lock = $system->getLock($lockid);
 
 if (getVarFromPost('program')) {
@@ -33,7 +29,7 @@ if (getVarFromPost('program')) {
 
 $location = $lp->currentLocation();
 
-if ((getVarFromPost('program') || getVarFromPost('next') || getVarFromPost('rewind')) && $location) {
+if (!getVarFromPost('apply') && $location) {
     // Es wurde am Handheld was gedrückt (nicht rechts) -> Wähle autom. 'next location' als das Schloss, vor dem wir gerade stehen.
     $lockid = $dbh->pquery("SELECT LockId FROM `lock` WHERE Location = ?", $location)->fetchColumn();
 }
