@@ -58,6 +58,7 @@ if (($perKey || $perAccess) && !$err) {
     </head>
     <body>
         <h1>Schlüssel sperren</h1>
+        Nach dem Sperren des Schlüssels müssen unbedingt die Schlösser mit dem System synchronisiert werden! <a href="sync.php">Klicken Sie hier</a>, um das Schloss-Programmiergerät vorzubereiten.
         <?php
         if ($success) echo '<div class=succ>Der Schlüssel (KeyId: ' . xsafe($keyid) . ') wurde gesperrt.</div>';
         foreach ($err as $e)
