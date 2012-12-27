@@ -10,7 +10,7 @@ try {
     $dbh = new DBAccess();
     $dbh->exec("DELETE FROM whitelist WHERE LockId IS NOT NULL");
     $dbh->exec("DELETE FROM blacklist WHERE LockId IS NOT NULL");
-    $dbh->exec("DELETE access WHERE AccessId IS NOT NULL");
+    $dbh->exec("DELETE FROM access WHERE AccessId IS NOT NULL");
     $dbh->exec("UPDATE `lock` SET last_change = NOW(), last_sync = NULL 
         WHERE LockId IS NOT NULL"); // last_change wird bei Aenderung zwar autom.
         // aktualisiert, aber eben nur bei AENDERUNG. Deswegen explizit.
