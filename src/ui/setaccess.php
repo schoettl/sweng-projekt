@@ -51,8 +51,8 @@ if ($get || $set) {
                 Begin <= NOW() AND (NOW() <= End OR End IS NULL) AND 
                 AccessId != ?', $keyid, $accessid);
             if ($count > 0) $err[] = 'Für diesen Schlüssel sind bereits andere aktuell gültige Zugänge eingetragen.';
-            $count1 = $dbh->pcount('whitelist NATURAL JOIN `lock`', 'KeyId = ? AND last_change > last_sync', $keyid);
-            $count2 = $dbh->pcount('blacklist NATURAL JOIN `lock`', 'KeyId = ? AND last_change > last_sync', $keyid);
+            $count1 = $dbh->pcount('whitelist NATURAL JOIN `lock`', 'KeyId = ? AND last_change > last_sync OR last_sync IS NULL', $keyid);
+            $count2 = $dbh->pcount('blacklist NATURAL JOIN `lock`', 'KeyId = ? AND last_change > last_sync OR last_sync IS NULL', $keyid);
             if ($count1 > 0 || $count2 > 0) $err[] = 'Es sind noch nicht alle Schlösser bezüglich dieses Schlüssels synchronisiert.'; // dabei wird black-/whitelist betrachtet
 
             if (!$err) {
@@ -76,7 +76,7 @@ if ($get || $set) {
 <!DOCTYPE html>
 <html>
     <head>
-        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+        <meta charset="UTF-8">
         <link rel="stylesheet" tyep="text/css" href="../web.css" />
         <title>Set Access</title>
     </head>
@@ -133,7 +133,7 @@ if ($get || $set) {
             if ($success) {
                 echo '<div class="succ" >Der Zugang für den Schlüssel wurde erstellt bzw. geändert.</div>';
                 if ($key instanceof PassiveKey) {
-                    echo '<div>Das Schloss noch neu programmiert werden (wegen passivem Schlüssel).</div>';
+                    echo '<div>Das Schloss muss noch neu programmiert werden (wegen passivem Schlüssel).</div>';
                 }
             }
             ?>
