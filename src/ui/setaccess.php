@@ -40,7 +40,7 @@ if ($get || $set) {
             // Geht nur wenn's schon einen Zugang mit AccessId gibt
             $result = $dbh->pquery('SELECT KeyId FROM access WHERE AccessId = ?', $accessid);
             $keyid = $result->fetchColumn();
-            if (!$keyid) $err[] = 'Ungültige KeyId. Das Feld KeyId kann nur dann freigelassen werden, wenn bereits ein Zugang zu AccessId existiert.';
+            if (!$keyid) $err[] = 'Ungültige KeyId.';
         } else {
             $key = $system->getKey($keyid);
             if (!$key) $err[] = 'Ungültige KeyId.';
@@ -83,6 +83,13 @@ if ($get || $set) {
     </head>
     <body>
         <h1>Zugang für Schlüssel erstellen/ändern</h1>
+        Hier können Sie einen Zugang für einen Schlüssel erstellen bzw. ändern.
+        Geben Sie dazu die AccessId (aus Zugangs-/Buchungssystem) ein.
+        Das Feld mit der KeyId kann freigelassen werden, wenn
+        <ul>
+            <li>ein Schlüssel auf dem Schlüssel-Programmiergerät liegt.</li>
+            <li>der Zugang schon erstellt wurde. In diesem Fall wird der bereits festgelegte Schlüssel angenommen.</li>
+        </ul>
         <form method="POST" >
             <?php
             foreach ($err as $e)
