@@ -7,6 +7,7 @@ require_once '../lib/stdio.php';
 require_once '../lib/DBAccess.php';
 require_once '../domain/System.php';
 require_once '../domain/PassiveKey.php';
+require_once '../domain/AccessEntry.php';
 
 session_start();
 
