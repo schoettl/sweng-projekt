@@ -57,11 +57,8 @@ if ($get || $set) {
             if ($count1 > 0 || $count2 > 0) $err[] = 'Es sind noch nicht alle Schlösser bezüglich dieses Schlüssels synchronisiert.'; // dabei wird black-/whitelist betrachtet
 
             if (!$err) {
-                // $dbh->pexec("REPLACE access SELECT ?, LockId, ?, ?, ? FROM `lock` WHERE Location = ?", 
-                //    $accessid, $keyid, $accessEntry->Begin, $accessEntry->End, $accessEntry->Location);            
-                // $dbh->pexec("REPLACE access VALUES (?, (SELECT LockId FROM `lock` WHERE Location = ?), ?, ?, ?)", 
-                //    $accessid, $accessEntry->Location, $keyid, $accessEntry->Begin, $accessEntry->End);
-                // ^ geht leider nicht, weil dadurch `lock` kurz gesperrt wird, wodurch der trigger nicht ausgeloest werden kann!
+                // Datenbankeintragung in 2 Schritten, anders geht's wohl nicht:
+                // sonst wird `lock` kurz gesperrt, wodurch der trigger nicht ausgeloest werden kann!
 
                 $result = $dbh->pquery("SELECT LockId FROM `lock` WHERE Location = ?", $accessEntry->Location);
                 $lockid = $result->fetchColumn();
