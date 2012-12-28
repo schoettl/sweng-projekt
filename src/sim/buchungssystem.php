@@ -39,13 +39,13 @@
 		<script>
 			$(function() {
 				$.timepicker.regional['de'] = {
-				  timeOnlyTitle: 'Uhrzeit auswählen',
+				  timeOnlyTitle: 'Uhrzeit auswï¿½hlen',
 				  timeText: 'Zeit',
 				  hourText: 'Stunde',
 				  minuteText: 'Minute',
 				  secondText: 'Sekunde',
 				  currentText: 'Jetzt',
-				  closeText: 'Auswählen',
+				  closeText: 'Auswï¿½hlen',
 				  ampm: false
 				};
 				$.timepicker.setDefaults($.timepicker.regional['de']);
@@ -105,10 +105,10 @@
 							<td>location</td>
 							<td>
 								<select name="location" id="location">';
-									$result = $dbh->query("SELECT LockId, Location FROM `lock` ORDER BY Location");
-									while ($row = $result->fetchObject()) {
+									$result = $dbh->query("SELECT Location FROM `lock` ORDER BY Location");
+									while (($loc = $result->fetchColumn()) !== false) {
 										$content .= '
-									<option value="'.$row->LockId.'">'.$row->Location.'</option>';
+									<option>'.$loc.'</option>';
 									}
 									$content .= '
 								</select>
