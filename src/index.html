@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="UTF-8">
+		<link rel="stylesheet" type="text/css" href="sweng.css" />
+		<script src="jquery/jquery-1.8.3.min.js"></script>
+		<script>
+			function load_data() {
+				$.ajax({
+					url: "ajax.php?action=getLink",
+					type: "GET",
+				
+					success: function (reqCode) {
+						if(reqCode != "false") {
+							$('#content').attr("src",reqCode);
+						}
+						load_data();
+					}
+				});
+			}
+			$(document).ready(function() {
+				load_data();
+				window.open("http://ffb.twocoders.de/tree.html","menu");
+			});
+			
+		</script>
+	</head>
+	<body>
+		<iframe id="content"></iframe> 
+	</body>
+</html>
