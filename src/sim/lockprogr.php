@@ -57,7 +57,7 @@ if (!getVarFromPost('apply') && $location) {
                 <tr>
                     <td>
                         <div style="position: relative">            
-                            <div style="position: absolute; top: 250px; left: 300px">
+                            <div style="position: absolute; top: 100px; left: 150px">
                                 <p>
                                     <input type="submit" name="next" value="Nächstes" />
                                     <?php                                    
@@ -74,7 +74,7 @@ if (!getVarFromPost('apply') && $location) {
                                 }
                                 ?>
                             </div>
-                            <img src="../img/lockprogrammer.png">
+                            <img src="../img/lockprogrammer.png" width="612" height="534">
                         </div>
                     </td>
                     <td>
