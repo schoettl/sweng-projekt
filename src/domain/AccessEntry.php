@@ -7,10 +7,10 @@ class AccessEntry
     public $location;
     public $begin;
     public $end;    
-    function __construct($id = 0, $fistName = '', $lastName = '', $location = '', $begin = null, $end = null)
+    function __construct($id = 0, $firstName = '', $lastName = '', $location = '', $begin = null, $end = null)
     {
         $this->id = $id;
-        $this->fistName = $fistName;
+        $this->firstName = $firstName;
         $this->lastName = $lastName;
         $this->location = $location;
         $this->begin = $begin;
