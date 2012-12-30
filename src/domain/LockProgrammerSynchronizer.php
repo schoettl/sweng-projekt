@@ -10,17 +10,25 @@ class LockProgrammerSynchronizer
         $dbh = new DBAccess();
         
         // Von Programmiergeraet in DB
-        $stmt = $dbh->prepare("UPDATE `lock` SET last_sync = NOW() WHERE LockId = ?");
+        $queryStmt = $dbh->prepare("SELECT last_change FROM `lock` WHERE LockId = ?");
+        $updatStmt = $dbh->prepare("UPDATE `lock` SET last_sync = NOW() WHERE LockId = ?");
         foreach ($lockProgrammer->getConfigList() as $cfg) {
             if ($cfg->inSync) {
-                $stmt->bindParam(1, $cfg->lockId, PDO::PARAM_INT);
-                $stmt->execute();
+                $queryStmt->bindParam(1, $cfg->lockId, PDO::PARAM_INT);
+                $queryStmt->execute();
+                $lastChange = $queryStmt->fetchColumn();
+                if ($lastChange == $cfg->lastChange) {
+                    // Keine Aenderung, waehrend LockProgrammer unterwegs war
+                    // last_sync in Tabelle `lock` aktualisieren!
+                    $updatStmt->bindParam(1, $cfg->lockId, PDO::PARAM_INT);
+                    $updatStmt->execute();
+                }
             }
         }
         
         // Von DB auf Programmiergeraet
         $list = array();
-        $locks = $dbh->query("SELECT LockId, Location FROM `lock` WHERE last_change > last_sync OR last_sync IS NULL");
+        $locks = $dbh->query("SELECT LockId, Location, last_change FROM `lock` WHERE last_change > last_sync OR last_sync IS NULL");
         while ($lock = $locks->fetchObject()) {            
             $wlres = $dbh->pquery("SELECT KeyId FROM whitelist WHERE LockId = ?", $lock->LockId);
             $blres = $dbh->pquery("SELECT KeyId FROM blacklist WHERE LockId = ?", $lock->LockId);
@@ -36,7 +44,7 @@ class LockProgrammerSynchronizer
             }
             $lockConfig = new LockConfig($al, $wl, $bl);
             // LockProgrammerConfig anlegen und zur Liste hinzufuegen
-            $lockProgrammerConfig = new LockProgrammerConfig($lock->LockId, $lock->Location, $lockConfig);
+            $lockProgrammerConfig = new LockProgrammerConfig($lock->LockId, $lock->Location, $lockConfig, $lock->last_change);
             $list[] = $lockProgrammerConfig;
         }
         
