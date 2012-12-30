@@ -54,7 +54,7 @@
 			CodeGeneration
 		</plugin>
 </profile>
-<XMI xmi.version = '1.2' xmlns:UML = 'org.omg.xmi.namespace.UML' timestamp = 'Tue Dec 18 14:28:10 CET 2012'>
+<XMI xmi.version = '1.2' xmlns:UML = 'org.omg.xmi.namespace.UML' timestamp = 'Sun Dec 30 15:37:20 CET 2012'>
   <XMI.header>    <XMI.documentation>
       <XMI.exporter>ArgoUML (using Netbeans XMI Writer version 1.0)</XMI.exporter>
       <XMI.exporterVersion>0.34(6) revised on $Date: 2010-01-11 22:20:14 +0100 (Mon, 11 Jan 2010) $ </XMI.exporterVersion>
@@ -1414,6 +1414,25 @@
                   </UML:Attribute.initialValue>
                   <UML:StructuralFeature.type>
                     <UML:Enumeration href = 'http://argouml.org/profiles/uml14/default-uml14.xmi#-84-17--56-5-43645a83:11466542d86:-8000:0000000000000880'/>
+                  </UML:StructuralFeature.type>
+                </UML:Attribute>
+                <UML:Attribute xmi.id = '-64--88-56-1-6a97d44a:13bec3dd3b0:-8000:0000000000000BA2'
+                  name = 'lastUpdate' visibility = 'public' isSpecification = 'false' ownerScope = 'instance'
+                  changeability = 'changeable' targetScope = 'instance'>
+                  <UML:StructuralFeature.multiplicity>
+                    <UML:Multiplicity xmi.id = '-64--88-56-1-6a97d44a:13bec3dd3b0:-8000:0000000000000BA3'>
+                      <UML:Multiplicity.range>
+                        <UML:MultiplicityRange xmi.id = '-64--88-56-1-6a97d44a:13bec3dd3b0:-8000:0000000000000BA4'
+                          lower = '1' upper = '1'/>
+                      </UML:Multiplicity.range>
+                    </UML:Multiplicity>
+                  </UML:StructuralFeature.multiplicity>
+                  <UML:Attribute.initialValue>
+                    <UML:Expression xmi.id = '-64--88-56-1-6a97d44a:13bec3dd3b0:-8000:0000000000000BE0'
+                      language = '' body = 'Wert der Spalte last_update der Tabelle `lock`'/>
+                  </UML:Attribute.initialValue>
+                  <UML:StructuralFeature.type>
+                    <UML:DataType href = 'http://argouml.org/profiles/uml14/default-uml14.xmi#-84-17--56-5-43645a83:11466542d86:-8000:000000000000087C'/>
                   </UML:StructuralFeature.type>
                 </UML:Attribute>
               </UML:Classifier.feature>
@@ -4885,7 +4904,7 @@
     </path>
   </group>
   <group name="Fig27"
-       description="org.argouml.uml.diagram.static_structure.ui.FigClass[656, 320, 142, 105]pathVisible=false;stereotypeView=0;operationsVisible=true;attributesVisible=true;"
+       description="org.argouml.uml.diagram.static_structure.ui.FigClass[656, 320, 142, 122]pathVisible=false;stereotypeView=0;operationsVisible=true;attributesVisible=true;"
        href="-64--88-56-1-267de861:13b413e8c3c:-8000:0000000000000B35"
        fill="1"
        fillcolor="white"
@@ -4900,7 +4919,7 @@
       x="656"
       y="320"
       width="142"
-      height="105"
+      height="122"
       fill="1"
       fillcolor="white"
       stroke="1"
@@ -4956,7 +4975,7 @@
       strokecolor="black"
     />
     <group name="Fig27.4"
-         description="org.argouml.uml.diagram.ui.FigAttributesCompartment[657, 345, 140, 59]"
+         description="org.argouml.uml.diagram.ui.FigAttributesCompartment[657, 345, 140, 76]"
          href="-64--88-56-1-267de861:13b413e8c3c:-8000:0000000000000B35"
          fill="0"
          fillcolor="white"
@@ -4970,7 +4989,7 @@
         x="657"
         y="345"
         width="140"
-        height="59"
+        height="76"
         fill="0"
         fillcolor="white"
         stroke="0"
@@ -5012,7 +5031,7 @@
         x="657"
         y="379"
         width="140"
-        height="23"
+        height="17"
         fill="0"
         fillcolor="white"
         stroke="0"
@@ -5024,10 +5043,26 @@
         textsize="12"
         justification="Left"
       >inSync : Boolean</text>
+      <text name="Fig27.4.4"
+        x="657"
+        y="396"
+        width="140"
+        height="23"
+        fill="0"
+        fillcolor="white"
+        stroke="0"
+        strokecolor="black"
+        textcolor="black"
+        font="Dialog"
+        italic="false"
+        bold="false"
+        textsize="12"
+        justification="Left"
+      >lastUpdate : Integer</text>
     </group>
     <rectangle name="Fig27.5"
       x="656"
-      y="403"
+      y="420"
       width="142"
       height="1"
       fill="1"
@@ -5036,7 +5071,7 @@
       strokecolor="black"
     />
     <group name="Fig27.6"
-         description="org.argouml.uml.diagram.ui.FigOperationsCompartment[657, 404, 140, 21]"
+         description="org.argouml.uml.diagram.ui.FigOperationsCompartment[657, 421, 140, 21]"
          href="-64--88-56-1-267de861:13b413e8c3c:-8000:0000000000000B35"
          fill="0"
          fillcolor="white"
@@ -5048,7 +5083,7 @@
       
       <rectangle name="Fig27.6.0"
         x="657"
-        y="404"
+        y="421"
         width="140"
         height="21"
         fill="0"
