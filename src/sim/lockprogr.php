@@ -47,8 +47,8 @@ if (!getVarFromPost('apply') && $location) {
         Nicht vergessen, das Schloss-Programmiergerät vorher <a href="../ui/sync.php">mit dem System zu synchronisieren</a>.
         <form method="POST" >
             <?php
-            if (isset($success))
-                echo '<div class="succ">Programmierung erfolgreich!</div>';
+            //if (isset($success))
+            //    echo '<div class="succ">Programmierung erfolgreich!</div>';
             foreach ($err as $e)
                 echo '<div class="err" >' . xsafe($e) . '</div>'; // div id und css fuer error messages            
             ?>
@@ -66,8 +66,18 @@ if (!getVarFromPost('apply') && $location) {
                                     }
                                     ?>
                                 </p>
-                                <p><input type="submit" name="program" value="Programmieren" /></p>
-                                <p><input type="submit" name="rewind" value="Von vorne" /> (nur nicht-synchronisierte)</p> 
+                                <p>
+                                    <input type="submit" name="program" value="Programmieren" />
+                                    <?php
+                                    if (isset($success)) {
+                                        echo 'Erfolgreich!';
+                                    }
+                                    ?>
+                                </p>
+                                <p>
+                                    <input type="submit" name="rewind" value="Von vorne" />
+                                    (nur nicht-synchronisierte)
+                                </p> 
                                 <?php
                                 if ($location === false) {
                                     echo '<br>Keine weiteren Schlösser zu synchronisieren.<br>Probieren Sie "Von vorne", falls Sie Schlösser<br>übersprungen haben.';
