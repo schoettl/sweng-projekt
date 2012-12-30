@@ -7,6 +7,7 @@ require_once '../lib/stdio.php';
 require_once '../lib/DBAccess.php';
 require_once '../domain/System.php';
 require_once '../domain/PassiveKey.php';
+require_once '../domain/ActiveKey.php';
 require_once '../domain/AccessEntry.php';
 
 session_start();
@@ -17,12 +18,13 @@ $system = System::getInstance();
 $accessEntry = null;
 
 $key = $system->getKeyProgrammer1()->getKey();
+$isKeyAttached = (bool) $key;
 
 $accessid = getVarFromPostOrGet('accessid');
 $keyid = getVarFromPostOrGet('keyid');
 
 // Wenn key id nicht explizit angegeben, von KeyProgrammer holen
-if (!$keyid && $key) {
+if (!$keyid && $isKeyAttached) {
     $keyid = $key->getKeyId();
 }
 
@@ -68,6 +70,18 @@ if ($get || $set) {
                 $count = $dbh->pexec("REPLACE access VALUES (?, ?, ?, ?, ?)",
                     $accessid, $lockid, $keyid, $accessEntry->begin, $accessEntry->end);
                 // REPLACE macht 1 oder 2 Dinge: [ DELETE FROM ... ; ] INSERT INTO ...
+                
+                // Update Active Key if it is on KeyProgrammer
+                if ($isKeyAttached && $key instanceof ActiveKey) {
+                    $result = $dbh->pquery("SELECT LockId, Begin, End FROM access WHERE KeyId = ?", $key->getKeyId());
+                    $list = array();
+                    while ($row = $result->fetchObject()) {
+                        $list[] = new ActiveKeyConfig($row->LockId, $row->Begin, $row->End);
+                    }
+                    $key->setConfigList($list);
+                }
+                
+                
                 if ($count != 1 && $count != 2) $err[] = 'Fehler beim Eintragen in die Datenbank.'; else
                 $success = true; // wenn's keine keine Exception gibt
             }
