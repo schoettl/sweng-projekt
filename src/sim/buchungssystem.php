@@ -17,16 +17,19 @@
 		case "save":
 			$return = save();
 			break;
+		case "delete":
+			$return = delete();
+			break;
 	}
 	
 	echo $return["content"];
 ?>
 
 
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml">
-	<head>
-		<meta http-equiv="content-type" content="text/html;charset=utf-8" />
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="UTF-8">
 		<title>Buchungssystem</title>
 		<link rel="stylesheet" href="../jquery/jquery.ui.all.css">
 		<link rel="stylesheet" tyep="text/css" href="../web.css" />
@@ -39,13 +42,13 @@
 		<script>
 			$(function() {
 				$.timepicker.regional['de'] = {
-				  timeOnlyTitle: 'Uhrzeit ausw�hlen',
+				  timeOnlyTitle: 'Uhrzeit auswählen',
 				  timeText: 'Zeit',
 				  hourText: 'Stunde',
 				  minuteText: 'Minute',
 				  secondText: 'Sekunde',
 				  currentText: 'Jetzt',
-				  closeText: 'Ausw�hlen',
+				  closeText: 'Auswählen',
 				  ampm: false
 				};
 				$.timepicker.setDefaults($.timepicker.regional['de']);
@@ -82,7 +85,29 @@
 						}
 					});
 				});
+				
+				$('#beginNow').click(function() {
+					var increment = $('#beginAdd option:selected').val();
+					$('#from').val(getCurTime(increment));
+				});
+				
+				$('#endNow').click(function() {
+					var increment = $('#endAdd option:selected').val();
+					$('#to').val(getCurTime(increment));
+				});
 			});
+			
+			function getCurTime(offset) {
+				var now = new Date();
+				var d = new Date(now.getTime() + (offset * 60 * 1000));
+				var day = d.getDate();
+				var month = d.getMonth() + 1;
+				var year = d.getFullYear();
+				var hour = d.getHours();
+				var min = d.getMinutes();
+				
+				return year + "-" + month + "-" + day + " " + hour + ":" + min;
+			}
 		</script>
 		<?php echo $return["head"]; ?>
 	</head>
@@ -93,43 +118,83 @@
 			//-----------------------------------------------------
 			
 			function form($dbh) {
-				
 				$content = '
 				<form action="?action=save" method="post">
 					<table border="0" cellspacing="0" cellpadding="4">
 						<tr>
-							<td>name</td>
+							<td>Name</td>
 							<td><input type="text" name="name" id="name" size="35" /></td>
 						</tr>
 						<tr>
-							<td>location</td>
+							<td>Ort</td>
 							<td>
 								<select name="location" id="location">';
-									$result = $dbh->query("SELECT Location FROM `lock` ORDER BY Location");
-									while (($loc = $result->fetchColumn()) !== false) {
+									$result = $dbh->query("SELECT LockId, Location FROM `lock` ORDER BY Location");
+									while ($row = $result->fetchObject()) {
 										$content .= '
-									<option>'.$loc.'</option>';
+									<option value="'.$row->LockId.'">'.$row->Location.'</option>';
 									}
 									$content .= '
 								</select>
 							</td>
 						</tr>
 						<tr>
-							<td>begin</td>
-							<td><input type="text" name="begin" id="from" /></td>
+							<td>Begin</td>
+							<td>
+								<input type="text" name="begin" id="from" />
+								&nbsp;&nbsp;&nbsp;jetzt
+								<select id="beginAdd">
+									<option value="0">+0</option>
+									<option value="1">+1</option>
+									<option value="2">+2</option>
+									<option value="3">+3</option>
+									<option value="4">+4</option>
+									<option value="5">+5</option>
+								</select>
+								<input type="button" value="Min" id="beginNow">
+							</td>
 						</tr>
 						<tr>
-							<td>end</td>
-							<td><input type="text" name="end" id="to" /></td>
+							<td>Ende</td>
+							<td>
+								<input type="text" name="end" id="to" />
+								&nbsp;&nbsp;&nbsp;jetzt
+								<select id="endAdd">
+									<option value="0">+0</option>
+									<option value="1">+1</option>
+									<option value="2">+2</option>
+									<option value="3">+3</option>
+									<option value="4">+4</option>
+									<option value="5">+5</option>
+								</select>
+								<input type="button" value="Min" id="endNow">
+							</td>
 						</tr>
-						<!--<tr>
-							<td>id</td>
-							<td><input type="text" name="id" /></td>
-						</tr>-->
 					</table><br/>
-					<input type="submit" value="save">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<input type="button" id="randVals" value="random" />
+					<input type="submit" value="speichern">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<input type="button" id="randVals" value="zufällig" />
 					<div id="debug"></div>
 				</from>';
+				
+				// for changing and deleting values
+				
+				$content .= '<br/>
+				<fieldset>
+					<legend>Daten ändern :: bitte wählen</legend>
+					<select name="ids" id="change">';
+					if(count($_SESSION['accessEntryList']) > 0) {
+						foreach($_SESSION['accessEntryList'] as $keyid => $accessEntry) {
+							if($keyid > 0)
+								$content .= '
+						<option value="'.$accessEntry->id.'">'.$accessEntry->id.' ('.$accessEntry->firstName.' '.$accessEntry->lastName.')</option>';
+						}
+					}
+					$content .= '
+					</select>
+					<input type="button" value="ändern" id="change">
+					<input type="button" value="löschen" id="delete">
+				</fieldset>';
+				
+				
 				$return["content"] = $content;
 				return $return;
 			}
@@ -153,6 +218,10 @@
 					$return["content"] =  '<div class="err" >Benutzer konnte nicht angelegt werden!</div>';
 				$return["head"] = '<meta http-equiv="refresh" content="1;url=?action=form">';
 				return $return;
+			}
+			
+			function delete() {
+			
 			}
 		?>
 		<div id="debug"></div>
