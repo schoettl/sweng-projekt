@@ -1,5 +1,6 @@
 <?php
 	require '../lib/DBAccess.php';	
+	require '../lib/stdio.php';
 	require '../domain/AccessEntry.php';
 	
 	session_start();
@@ -129,10 +130,10 @@
 							<td>Ort</td>
 							<td>
 								<select name="location" id="location">';
-									$result = $dbh->query("SELECT LockId, Location FROM `lock` ORDER BY Location");
-									while ($row = $result->fetchObject()) {
+									$result = $dbh->query("SELECT Location FROM `lock` ORDER BY Location");
+									while (($loc = $result->fetchColumn()) !== false) {
 										$content .= '
-									<option value="'.$row->LockId.'">'.$row->Location.'</option>';
+									<option>'.xsafe($loc).'</option>';
 									}
 									$content .= '
 								</select>
