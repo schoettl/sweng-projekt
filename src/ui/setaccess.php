@@ -60,10 +60,15 @@ if ($get || $set) {
                 // Datenbankeintragung in 2 Schritten, anders geht's wohl nicht:
                 // sonst wird `lock` kurz gesperrt, wodurch der trigger nicht ausgeloest werden kann!
 
-                $result = $dbh->pquery("SELECT LockId FROM `lock` WHERE Location = ?", $accessEntry->Location);
+                $result = $dbh->pquery("SELECT LockId FROM `lock` WHERE Location = ?", $accessEntry->location);
                 $lockid = $result->fetchColumn();
-                $dbh->pexec("REPLACE access VALUES (?, ?, ?, ?, ?)", 
-                    $accessid, $lockid, $keyid, $accessEntry->Begin, $accessEntry->End);
+                if ($lockid === false) $err[] = 'Location kann in DB nicht gefunden werden.';
+                //$rowCount = $result->rowCount(); echo $rowCount . '<br>';
+                //echo $accessid . ', ' . $lockid . ', ' . $keyid . ', '; var_dump($accessEntry);
+                $count = $dbh->pexec("REPLACE access VALUES (?, ?, ?, ?, ?)",
+                    $accessid, $lockid, $keyid, $accessEntry->begin, $accessEntry->end);
+                // REPLACE macht 1 oder 2 Dinge: [ DELETE FROM ... ; ] INSERT INTO ...
+                if ($count != 1 && $count != 2) $err[] = 'Fehler beim Eintragen in die Datenbank.'; else
                 $success = true; // wenn's keine keine Exception gibt
             }
         }
