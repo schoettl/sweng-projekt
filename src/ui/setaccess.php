@@ -88,14 +88,9 @@ if ($get || $set) {
             if (!$err) {
                 $success = replaceAccess($dbh, $accessEntry, $keyid);
                 
-                // Update Active Key if it is on KeyProgrammer
+                // Falls ActiveKey aufliegt: Synchronisieren
                 if ($isKeyAttached && $key instanceof ActiveKey) {
-                    $result = $dbh->pquery("SELECT LockId, Begin, End FROM access WHERE KeyId = ?", $key->getKeyId());
-                    $list = array();
-                    while ($row = $result->fetchObject()) {
-                        $list[] = new ActiveKeyConfig($row->LockId, $row->Begin, $row->End);
-                    }
-                    $key->setConfigList($list);
+                    $system->getActiveKeySynchronizer()->synchronize($key);
                 }
             }
         }
