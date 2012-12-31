@@ -9,6 +9,7 @@ require_once 'LockProgrammer.php';
 require_once 'LockProgrammerSynchronizer.php';
 require_once 'PseudoAccessSystem.php';
 require_once 'ActiveKeyConfig.php';
+require_once 'ActiveKeySynchronizer.php';
 
 class System {
     
@@ -17,7 +18,8 @@ class System {
     private $lp1; // LockProgrammer
     private $kp1; // KeyProgrammer
     private $lps; // LockProgrammerSynchronizer
-    private $as;  // AccessSystem    
+    private $as;  // AccessSystem
+    private $aks; // ActiveKeySynchronizer
     
     /**
      * Set the instance of this class by simply setting the
@@ -50,6 +52,7 @@ class System {
         $this->kp1 = new KeyProgrammer();
         $this->lps = new LockProgrammerSynchronizer();
         $this->as  = new PseudoAccessSystem();
+        $this->aks = new ActiveKeySynchronizer();
     }
     
     function getKey($id)
@@ -117,5 +120,10 @@ class System {
     function getLockProgrammer1()
     {
         return $this->lp1;
+    }
+    
+    function getActiveKeySynchronizer()
+    {
+        return $this->aks;
     }
 }
