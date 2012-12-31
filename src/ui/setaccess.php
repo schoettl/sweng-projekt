@@ -10,6 +10,33 @@ require_once '../domain/PassiveKey.php';
 require_once '../domain/ActiveKey.php';
 require_once '../domain/AccessEntry.php';
 
+function deleteAccess($dbh, $accessId)
+{
+    // Not tested, but would be a good option 
+    // if getAccessEntry(id) === false or a delete button
+    $dbh->pexec("DELETE FROM access WHERE AccessId = ?", $accessId);
+}
+
+function replaceAccess($dbh, $accessEntry, $keyId)
+{
+    global $err;
+    
+    // Datenbankeintragung in 2 Schritten, anders geht's wohl nicht:
+    // sonst wird `lock` kurz gesperrt, wodurch der trigger nicht ausgeloest werden kann!
+
+    $result = $dbh->pquery("SELECT LockId FROM `lock` WHERE Location = ?", $accessEntry->location);
+    $lockId = $result->fetchColumn();
+    if ($lockId === false) $err[] = 'Ungültige Location.';
+    //$rowCount = $result->rowCount(); echo $rowCount . '<br>';
+    //echo $accessid . ', ' . $lockid . ', ' . $keyid . ', '; var_dump($accessEntry);
+    $count = $dbh->pexec("REPLACE access VALUES (?, ?, ?, ?, ?)",
+        $accessEntry->id, $lockId, $keyId, $accessEntry->begin, $accessEntry->end);
+    // REPLACE macht 1 oder 2 Dinge: [ DELETE FROM ... ; ] INSERT INTO ...
+
+    if ($count != 1 && $count != 2) $err[] = 'Fehler beim Eintragen in die Datenbank.';
+    return !$err; // sollte implizit bool werden, oder?
+}
+
 session_start();
 
 $err = array();
@@ -33,7 +60,7 @@ $get = getVarFromPost('get');
 $set = getVarFromPost('set');
 if ($get || $set) {
     // Überprüfung von access id
-    $accessEntry = $system->getAccessSystem()->getAccessEntry($accessid);    
+    $accessEntry = $system->getAccessSystem()->getAccessEntry($accessid);
     if (!$accessEntry) $err[] = 'Ungültige AccessId.';
     
     if ($set) {
@@ -59,17 +86,7 @@ if ($get || $set) {
             if ($count1 > 0 || $count2 > 0) $err[] = 'Es sind noch nicht alle Schlösser bezüglich dieses Schlüssels synchronisiert.'; // dabei wird black-/whitelist betrachtet
 
             if (!$err) {
-                // Datenbankeintragung in 2 Schritten, anders geht's wohl nicht:
-                // sonst wird `lock` kurz gesperrt, wodurch der trigger nicht ausgeloest werden kann!
-
-                $result = $dbh->pquery("SELECT LockId FROM `lock` WHERE Location = ?", $accessEntry->location);
-                $lockid = $result->fetchColumn();
-                if ($lockid === false) $err[] = 'Location kann in DB nicht gefunden werden.';
-                //$rowCount = $result->rowCount(); echo $rowCount . '<br>';
-                //echo $accessid . ', ' . $lockid . ', ' . $keyid . ', '; var_dump($accessEntry);
-                $count = $dbh->pexec("REPLACE access VALUES (?, ?, ?, ?, ?)",
-                    $accessid, $lockid, $keyid, $accessEntry->begin, $accessEntry->end);
-                // REPLACE macht 1 oder 2 Dinge: [ DELETE FROM ... ; ] INSERT INTO ...
+                $success = replaceAccess($dbh, $accessEntry, $keyid);
                 
                 // Update Active Key if it is on KeyProgrammer
                 if ($isKeyAttached && $key instanceof ActiveKey) {
@@ -80,10 +97,6 @@ if ($get || $set) {
                     }
                     $key->setConfigList($list);
                 }
-                
-                
-                if ($count != 1 && $count != 2) $err[] = 'Fehler beim Eintragen in die Datenbank.'; else
-                $success = true; // wenn's keine keine Exception gibt
             }
         }
     }
