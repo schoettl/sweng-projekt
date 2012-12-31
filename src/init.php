@@ -16,7 +16,7 @@ try {
         // aktualisiert, aber eben nur bei AENDERUNG. Deswegen explizit.
     
     // -- key 1, 2, 3 und 6, 7, 8 auf whitelist von lock 'R 0. Haupteingang'
-    $dbh->exec("INSERT whitelist VALUES (31, 1), (31, 2), (31, 3), (31, 6), (31, 7), (31, 8)");
+    $dbh->exec("INSERT whitelist VALUES (3, 1), (3, 2), (3, 3), (3, 6), (3, 7), (3, 8)");
 
     System::setInstance(new System());
     
