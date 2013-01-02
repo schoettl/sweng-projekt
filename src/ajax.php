@@ -12,6 +12,9 @@
 		case "getLink":
 			echo getLink();
 			break;
+		case "getTime":
+			echo getTime();
+			break;
 	}
 	
 	
@@ -36,5 +39,13 @@
 			return "false";
 			
 		//echo "<pre>".print_r($_SESSION,true)."<pre>";
+	}
+	
+	function getTime() {
+		$fp = popen('date +"%H:%M:%S"',"r");
+		$time = fgets($fp);
+		pclose($fp);
+		
+		return $time;
 	}
 ?>

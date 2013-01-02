@@ -18,19 +18,32 @@
 					});
 				});
 			});
+			
+			function getTime() {
+				$.ajax({
+					url: "ajax.php?action=getTime",
+					type: "GET",
+				
+					success: function (reqCode) {
+						$('#time').html("Systemzeit:" + reqCode);
+					}	
+				});
+			}
+			
+			var aktiv = window.setInterval("getTime()", 1000);
 		</script>
 	</head>
 	<body>
 		<ul id="menu">
 			<li><a title="init.php">System initialisieren</a></li>
-            <li><a title="ui/">Benutzeroberfläche</a>
+            <li><b>Benutzeroberfläche</b>
 				<ul>
 					<li><a title="ui/setaccess.php">Zugang erstellen bzw. ändern</a></li>
 					<li><a title="ui/sync.php" >Schloss-Programmiergerät synchronisieren</a></li>
 					<li><a title="ui/ban.php" >Schlüssel sperren</a></li>
 				</ul>
 			</li>
-			<li><a title="sim/">Simulation</a>
+			<li><b>Simulation</b>
 				<ul>
 					<li><a title="sim/lock.php">Türen/Schlösser ansehen, aufsperren und wieder zumachen</a></li>
 					<li><a title="sim/lockprogr.php">Schlösser programmieren</a></li>
@@ -42,5 +55,6 @@
 		</ul>
 		<br/>
 		<div id="succ"></div>
+		<div id="time"></div>
 	</body>
 </html>
