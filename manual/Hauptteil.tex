@@ -1,0 +1,227 @@
+\section{Erklärung}
+Das System der Gruppe B wird genutzt um Zugangsberechtigungen für Schließsysteme zu Verwalten, die mittels aktiver oder passiver Transponder/Schlüsselkarten arbeiten. Es ist sowohl für den Einsatz in Unternehmensumgebung, als auch für Hotels gedacht.
+Die Verwaltung der Berechtigungen und Konfiguration des Systems erfolgt über eine Weboberfläche, bestehend aus zwei Teilen.
+Zum Einen die eigentliche Benutzeroberfläche, wie sie im Feld eingesetzt wird. Hier können Zugänge erstellt/geändert, das Schloss-Programmiergerät synchronisiert und Schlüssel gesperrt werden. Des Weiteren ist ein Simulationsteil integriert, dieser kann genutzt werden um das System zu evaluieren. Hiermit können sowohl Türen und Schlösser gesperrt/entsperrt und programmiert werden, als auch Benutzer im Zugangssystem angelegt werden.
+
+%--------------------------------------------------------------------------------------------------
+
+\section{Begriffserklärung}
+\begin{description}
+\item [Zugang] \hfill \\
+Ein Zugang ist die zeitlich definierte Gültigkeit eines Schlüssels für ein bestimmtes Schloss. Jedem Zugang ist eine eindeutige AccessId zugeordnet.
+\item[Zugangssystem (auch Buchungssystem)] \hfill \\
+Das Zugangssystem ist ein existierendes System (z.B. Datenbank) die bereits bei den Kunden eingesetzt wird, um die Zuordnung von Personen zu Zutrittsrechten zu verwalten. Es ist unabhängig von dem hier erklärten Schlüsselverwaltungssystem. Zugangssystem ist ein allgemeiner Begriff, wohin gegen im Hotelumfeld der Begriff Buchungssystem verwendet wird. Jeder Eintrag im Zugangssystem ist über eine eindeutige Access-Id indiziert, auf die bei weitergehender Verwendung verwiesen werden kann.
+\end{description}
+\newpage
+
+%--------------------------------------------------------------------------------------------------
+
+\section{Benutzeroberfläche}
+Beim Aufruf der Weboberfläche öffnet sich das, in \hyperref[fig:Hauptmenue]{Abbildung~\ref*{fig:Hauptmenue}} gezeigte, Hauptmenü. Es enthält eine Liste aller im System verfügbaren Funktionen.
+Sowohl die Benutzeroberfläche, als auch der Simulationsteil werden hier dargestellt.
+In den folgenden Abschnitten wird nun die Funktionalität aller Menüpunkte erklärt und abschließend mit einem Beispiel verdeutlicht.
+
+\textbf{Vor der ersten Verwendung sollte eine Initialisierung des gesamten Systems mittels des Menüpunktes ``System initialisieren'' durchgeführt werden.}
+
+\begin{figure}[here]
+  \centering
+  \includegraphics[width=0.7\textwidth]{./Bilder/Menue.png}
+  \caption{Hauptmenü}
+  \label{fig:Hauptmenue}
+\end{figure}
+
+%----------------------------------------------
+
+\subsection{Zugang erstellen/ändern}
+\label{subsec:Zugang}
+Um einen Zugang zu erstellen bzw. zu ändern muss eine Verbindung zwischen einer Access-Id und einer Key-Id hergestellt werden.
+Die Access-Id identifiziert einen vorhandenen Eintrag im Zugangssystem und die Key-Id einen passiven Transponder/Schlüsselkarte.
+
+\begin{figure}[here]
+  \centering
+  \includegraphics[width=0.6\textwidth]{./Bilder/Zugang_erstellen.png}
+  \caption{Zugang erstellen/ändern}
+  \label{fig:Zugang_erstellen}
+\end{figure}
+
+\hyperref[fig:Zugang_erstellen]{Abbildung~\ref*{fig:Zugang_erstellen}} zeigt die vorhandenen Bedienelemente. Nach Eingabe einer Access-Id kann nun mittels der Schaltfläche \emph{``Zugang anzeigen''} der korrespondierende Eintrag im Zugangssystem angezeigt werden. Dieser enthält Informationen zur Person, Zugangszeitraum und Berechtigungen.
+Um die Key-Id einzugeben stehen mehrere Möglichkeiten zur Verfügung. Sollte bereits ein Schlüssel auf dem Schlüssel-Programmiergerät liegen, wird dieser automatisch in das Feld eingetragen, andernfalls kann dies auch manuell durchgeführt werden. Sollte zu dieser Access-Id aber bereits eine Verknüpfung zu einer Key-Id existieren kann das Feld auch freigelassen werden.
+Dies ist dann der Fall wenn ein, durch die Access-Id referenzierte, Eintrag geändert wird (z.B. Verlängerung des Gültigkeitszeitraums) und dadurch ein Update nötig wird.
+
+\textbf{Beachten Sie:} Da das Schlüsselverwaltungssystem in einer Simulationsumgebung ausgeführt wird, ist es zunächst nötig einen Eintrag im Zugangssystem anzulegen. Dies kann, wie in \hyperref[subsec:Buchungssystem]{Abschnitt~\ref*{subsec:Buchungssystem}} beschrieben, realisiert werden. Wie das Auflegen eines Schlüssels auf das Schlüssel-Programmiergerät simuliert wird, siehe \hyperref[subsec:Schl_prog]{Abschnitt~\ref*{subsec:Schl_prog}}.
+Des Weiteren ist darauf zu achten, dass bei der Programmierung eines aktiven Schlüssels, dieser bereits auf dem Schlüssel-Programmiergerät liegt.
+
+%----------------------------------------------
+
+\subsection{Schloss-Programmiergerät synchronisieren}
+Um nun die Konfiguration der Zugangsdaten auf das Schloss-Programmiergerät zu Übertragen, muss die Schaltfläche \emph{``Synchronisieren''} betätigt werden. Die aktuellen Daten werden mit dem Programmiergerät synchronisiert und nach Beendigung wird die Anzahl der Schlösser angezeigt, für die eine Aktualisierung erforderlich ist.
+
+%----------------------------------------------
+
+\subsection{Schlüssel sperren}
+\label{subsec:Schl_sperren}
+Im Falle eines Verlusts/Diebstahls des Schlüssels kann dieser hier gesperrt werden. Hierzu stehen zwei Möglichkeiten zur Verfügung. Wenn die Key-Id des Schlüssels bekannt ist, kann diese im Feld Key-Id eingetragen und über die Schaltfläche \emph{``Sperren''} gesperrt werden. Andernfalls kann auch die Access-Id angegeben werden, hierbei wird dann der Schlüssel gesperrt, der zum aktuellen Zeitpunkt mit diesem Zugangseintrag verknüpft ist.
+
+\textbf{Beachten Sie:} Nach dem Sperren eines Schlüssels muss unbedingt eine Synchronisierung mit dem Schloss-Programmiergerät erfolgen und mit dessen Hilfe eine Aktualisierung der Schlösser durchgeführt werden.
+\newpage
+
+%--------------------------------------------------------------------------------------------------
+
+\section{Simulation}
+Der Simulationsteil beinhaltet alle Funktionalitäten um externe System zu simulieren. Enthalten sind Türen/Schlösser, die Verwendung des Schloss-Programmiergeräts, des Schlüssel-Programmiergeräts und das Anlegen von Benutzern im Zugangs/Buchungssystem.
+
+%----------------------------------------------
+
+\subsection{Türen/Schlösser ansehen, sperren und entsperren}
+Hier kann die Interaktion eines Schlüssel mit einem Schloss simuliert werden. Hierzu ist die, in \hyperref[fig:Schloss]{Abbildung~\ref*{fig:Schloss}} gezeigte, Oberfläche vorhanden. Mittels der Lock Location kann das zu betrachtende Schloss ausgewählt werden, nach der Betätigung von \emph{``Schloss auswählen''} werden die Informationen zum Schloss angezeigt. Diese bestehen aus der LockId, dem Status (Locked oder Unlocked), sowie einer Liste von KeyId's die sich auf der White/Black/Access-List des Schlosses befinden.
+Um das Schloss mit einem Schlüssel zu öffnen, wird dessen Key-Id in das Feld eingetragen und mittels \emph{``Aufsperren''} geöffnet. Je nachdem ob die Key-Id Zugangsberechtigung besitzt, ändert sich der Status des Schlosses oder es wird eine Fehlermeldung anzeigt.
+Zum Sperren eines Schlosses kann die Schaltfläche \emph{``Zumachen''} verwendet werden.
+
+\begin{figure}[here]
+  \centering
+  \includegraphics[width=0.7\textwidth]{./Bilder/Schloss.png}
+  \caption{Simulation Schloss}
+  \label{fig:Schloss}
+\end{figure}
+
+%----------------------------------------------
+
+\subsection{Schlösser programmieren}
+Hier kann das Programmieren eines Schlosses mit Hilfe des Schloss-Pro"-grammiergeräts simuliert werden.
+Dazu wird, wie in \hyperref[fig:Schloss_Programmer]{Abbildung~\ref*{fig:Schloss_Programmer}} zu sehen, konfiguriert
+welches Schloss programmiert werden soll und mittels \emph{``Programmieren''} werden die Zugangsberechtigungen synchronisiert. 
+
+\begin{figure}[here]
+  \centering
+  \includegraphics[width=0.7\textwidth]{./Bilder/Schl_Programmer_2.png}
+  \caption{Simulation Schloss-Programmiergerät}
+  \label{fig:Schloss_Programmer_2}
+\end{figure}
+
+Um die Programmierung mehrerer Schlösser zu vereinfachen, kann auch mittels der Schaltfläche \emph{``Nächstes''}, das nächste Schloss ausgewählt und programmiert werden. Hierbei werden aber nur Schlösser angewählt, die noch nicht synchronisiert wurden.
+
+\begin{figure}[here]
+  \centering
+  \includegraphics[width=0.6\textwidth]{./Bilder/Schl_Programmer.png}
+  \caption{Simulation Schloss-Programmiergerät}
+  \label{fig:Schloss_Programmer}
+\end{figure}
+
+%----------------------------------------------
+
+\subsection{Schlüssel programmieren}
+\label{subsec:Schl_prog}
+Um die Simulation des Schlüssel Lese- und Programmiergeräts zu ermöglichen steht hierzu eine weitere Oberfläche zur Verfügung (\hyperref[fig:Key_Programmer]{Abbildung~\ref*{fig:Key_Programmer}}).
+Im Feld Key-Id kann eine Id eingegeben werden, die nach Betätigung von \emph{``Schlüssel auflegen''} in anderen Menüs (\hyperref[subsec:Zugang]{Abschnitt~\ref*{subsec:Zugang}} und \hyperref[subsec:Schl_sperren]{~\ref*{subsec:Schl_sperren}}) zur Verfügung steht und automatisch in die entsprechenden Felder eingetragen wird.
+Mittels der Schaltfläche \emph{``Schlüssel wegnehmen''} wird das Entfernen der Karte vom Lese- und Programmiergerät simuliert.
+
+\begin{figure}[here]
+  \centering
+  \includegraphics[width=0.7\textwidth]{./Bilder/Key_Programmer.png}
+  \caption{Simulation Schlüssel-Programmiergerät}
+  \label{fig:Key_Programmer}
+\end{figure}
+
+%----------------------------------------------
+
+\subsection{Benutzer anlegen (Buchungssystem)}
+\label{subsec:Buchungssystem}
+Das Schlüsselverwaltungssystem benötigt Datensätze um die nötigen Zugangsberechtigungen zu Erstellen. Hierfür wird im Normalfall eine Zugangssystem bzw. ein Buchungssystem verwendet, welches hier simuliert werden kann.
+Dazu ist es möglich, wie in \hyperref[fig:Buchungssystem]{Abbildung~\ref*{fig:Buchungssystem}} gezeigt, einen Benutzer, sowie Zeitraum und Ort der Zugangsberechtigung anzugeben. Nachdem alle Daten eingegeben wurden, kann der Datensatz mittels \emph{``speichern''} gespeichert werden. Zudem ist es möglich, sich einen zufälligen Datensatz generieren zu lassen. Der Index des Datensatzes entspricht gleichzeitig der Access-Id, diese wird im \hyperref[subsec:Zugang]{Abschnitt~\ref*{subsec:Zugang}} genutzt um einen Zugang zu erzeugen.
+Um Änderungen an einzelnen Daten vorzunehmen, steht ein Auswahlmenü mit den momentanen Datensätzen, sowie die Schaltflächen \emph{``ändern''} und \emph{``löschen''} zur Verfügung.
+
+\begin{figure}[here]
+  \centering
+  \includegraphics[width=0.7\textwidth]{./Bilder/Buchungssystem.png}
+  \caption{Simulation Buchungssystem}
+  \label{fig:Buchungssystem}
+\end{figure}
+\newpage
+
+%--------------------------------------------------------------------------------------------------
+
+\section{Beispiel}
+Im Folgenden wird an einem Beispiel gezeigt wie ein Datensatz angelegt wird, dieser mit einer Key-Id gekoppelt (Zugang erstellen) und anschließend in das vorgesehene Schloss programmiert wird. Danach wird getestet ob sich das Schloss mittels dieser Id öffnen lässt.
+
+Zunächst wird über den Menüpunkt \emph{``Benutzer anlegen (Buchungssystem)''} ein Eintrag im Zugangssystem angelegt.
+Hierzu wird, wie in  \hyperref[fig:Datens_erst]{Abbildung~\ref*{fig:Datens_erst}} gezeigt, Name, Zugangsort, sowie Beginn und Ende des Zugangszeitraums angegeben.
+
+\begin{figure}[here]
+  \centering
+  \includegraphics[width=0.7\textwidth]{./Bilder/Beispiel/Datens_erst.png}
+  \caption{Datensatz erstellen}
+  \label{fig:Datens_erst}
+\end{figure}
+
+Nach Betätigung der Schaltfläche \emph{``speichern''} wird der Datensatz gespeichert und in der Liste, siehe \hyperref[fig:Daten]{Abbildung~\ref*{fig:Daten}}, angezeigt. Der Listenindex entspricht gleichzeitig der Access-Id, in diesem Beispiel die `1'.
+
+\begin{figure}[here]
+  \centering
+  \includegraphics[width=0.7\textwidth]{./Bilder/Beispiel/Daten.png}
+  \caption{Datensatz Liste}
+  \label{fig:Daten}
+\end{figure}
+
+Um nun einen neuen Zugang zu erstellen, muss zunächst der Schlüssel auf das Lese- und Programmiergerät gelegt werden.
+Hierzu wird im Menü \emph{``Schlüssel programmieren''}, wie in \hyperref[fig:Key_aufl]{Abbildung~\ref*{fig:Key_aufl}} beschrieben, eine Key-Id eingegeben und anschließend mit \emph{``Schlüssel auflegen''} bestätigt. Danach ist der simulierte Schlüssel aufgelegt und es werden zusätzliche Informationen zu Typ und Key-Id angezeigt.
+
+\begin{figure}[here]
+  \centering
+  \includegraphics[width=0.7\textwidth]{./Bilder/Beispiel/Key_aufl.png}
+  \caption{Schlüssel auflegen}
+  \label{fig:Key_aufl}
+\end{figure}
+
+Jetzt kann die Key-Id zusammen mit einer Access-Id zu einem Zugang verknüpft werden. Hierfür wird im Menüpunkt \emph{``Zugang erstellen bzw. ändern''} die Access-Id des gewünschten Eintrags angegeben, siehe  \hyperref[fig:Zugang_erst]{Abbildung~\ref*{fig:Zugang_erst}}. Die Key-Id wird automatisch eingefügt, da bereits ein Schlüssel auf das Programmiergerät aufgelegt wurde. Über \emph{``Zugang anzeigen''} kann die Korrektheit des Eintrags nochmalig geprüft werden, mit \emph{``Zugang erstellen/ändern''} wird die konfigurierte Verknüpfung zwischen Key und Access-Id übernommen und der Zugang lokal gespeichert.
+
+\begin{figure}[here]
+  \centering
+  \includegraphics[width=0.7\textwidth]{./Bilder/Beispiel/Zugang_erst.png}
+  \caption{Schlüssel auflegen}
+  \label{fig:Zugang_erst}
+\end{figure}
+
+Um die Änderungen wirksam zu machen, muss mit Hilfe des Schloss-Pro"-grammiergeräts ein Update der betreffenden Schlösser durchgeführt werden. In diesem Falle, das Schloss am Ort ``R 0. Eingang Nord 1''.
+Dazu werden über den Menüpunkt \emph{``Schloss-Programmiergerät synchronisieren''} die lokalen Änderungen mit dem Schloss-Programmiergerät synchronisiert. Nach Betätigung der Schaltfläche \emph{``Synchronisieren''}, wird im Erfolgsfall angezeigt, für wie viele Schlösser eine Aktualisierung übertragen wurde (\hyperref[fig:Synchro]{Abbildung~\ref*{fig:Synchro}}).
+
+\begin{figure}[here]
+  \centering
+  \includegraphics[width=0.9\textwidth]{./Bilder/Beispiel/Synchro.png}
+  \caption{Schloss-Programmiergerät synchronisieren}
+  \label{fig:Synchro}
+\end{figure}
+
+Um den Aktualisierungsvorgang abzuschließen, müssen nun mittels des Schloss-Programmiergeräts alle betreffenden Schlösser aktualisiert werden. Im Menü unter \emph{``Schlösser programmieren''} kann dies simuliert werden (\hyperref[fig:Schl_prog]{Abbildung~\ref*{fig:Schl_prog}}).
+
+\begin{figure}[here]
+  \centering
+  \includegraphics[width=0.7\textwidth]{./Bilder/Beispiel/Schl_prog.png}
+  \caption{Schloss programmieren}
+  \label{fig:Schl_prog}
+\end{figure}
+
+\textbf{Beachten Sie:} nach erfolgter Programmierung der Schlösser muss nochmalig eine Synchronisierung des Schloss-Programmiergeräts, über den Menüpunkt \emph{``Schloss-Programmiergerät synchronisieren''} durchgeführt werden, da das System (User Interface bzw. Datenbank) sonst keine Kenntnis darüber hat, ob die Schlösser tatsächlich programmiert wurden.
+
+Jetzt kann das Öffnen des Schlosses, mittels Schlüssel simuliert werden. Hierzu ist der Menüpunkt \emph{``Türen/Schlösser ansehen, aufsperren und wieder zumachen''} vorgesehen. Über ``Lock Location'' kann das Schloss ausgewählt und mittels einer beliebigen Key-Id aufgesperrt werden, sofern diese Zugangsberechtigung besitzt (\hyperref[fig:Schl_oeff]{Abbildung~\ref*{fig:Schl_oeff}}).
+Damit ist die Programmierung des Schlosses abgeschlossen. 
+\begin{figure}[here]
+  \centering
+  \includegraphics[width=0.7\textwidth]{./Bilder/Beispiel/Schl_oeff.png}
+  \caption{Schloss öffnen}
+  \label{fig:Schl_oeff}
+\end{figure}
+
+\newpage
+
+%--------------------------------------------------------------------------------------------------
+
+\section{Vorkonfiguriertes Test-Setup}
+Um das Testen zu erleichtern, ist die Datenbank bereits in einem vorkonfigurierten Zustand und kann jederzeit mittels des Menüpunkts \emph{``System initialisieren''} wieder in diesen zurückgesetzt werden.
+
+Die Konfiguration beinhaltet:
+\begin{itemize}
+\item 10 Schlüssel (Key-Id 1 - 5 sind passive, 6 - 10 aktive Schlüssel)
+\item 4 Schlösser (diese können, ohne Id, direkt über ``Location'' ausgewählt werden)
+\item Schlüssel mit den Key-Id's 1,2,3,6,7,8 haben immer Zugang (white list) bei Schloss ``R 0. Haupteingang''
+\end{itemize}
+\newpage
